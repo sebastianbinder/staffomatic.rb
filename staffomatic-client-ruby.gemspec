@@ -25,6 +25,7 @@ Gem::Specification.new do |s|
     "Rakefile",
     "VERSION",
     "lib/staffomatic-client-ruby.rb",
+    "staffomatic-client-ruby.gemspec",
     "test/helper.rb",
     "test/test_staffomatic-client-ruby.rb"
   ]
@@ -38,23 +39,62 @@ Gem::Specification.new do |s|
     s.specification_version = 4
 
     if Gem::Version.new(Gem::VERSION) >= Gem::Version.new('1.2.0') then
+      s.add_runtime_dependency(%q<jruby-openssl>, [">= 0"])
+      s.add_runtime_dependency(%q<rake>, [">= 0"])
+      s.add_runtime_dependency(%q<psych>, [">= 0"])
+      s.add_runtime_dependency(%q<rubysl>, ["~> 2.0"])
+      s.add_runtime_dependency(%q<staffomatic-client-ruby>, [">= 0"])
+      s.add_development_dependency(%q<jeweler>, [">= 0"])
+      s.add_development_dependency(%q<awesome_print>, [">= 0"])
+      s.add_development_dependency(%q<guard-rspec>, [">= 0"])
+      s.add_development_dependency(%q<hirb-unicode>, [">= 0"])
+      s.add_development_dependency(%q<pry>, [">= 0"])
+      s.add_development_dependency(%q<redcarpet>, [">= 0"])
+      s.add_development_dependency(%q<wirb>, [">= 0"])
+      s.add_development_dependency(%q<wirble>, [">= 0"])
+      s.add_development_dependency(%q<yard>, [">= 0"])
       s.add_development_dependency(%q<shoulda>, [">= 0"])
       s.add_development_dependency(%q<rdoc>, ["~> 3.12"])
       s.add_development_dependency(%q<bundler>, ["~> 1.0"])
-      s.add_development_dependency(%q<jeweler>, ["~> 2.0.1"])
       s.add_development_dependency(%q<simplecov>, [">= 0"])
     else
+      s.add_dependency(%q<jruby-openssl>, [">= 0"])
+      s.add_dependency(%q<rake>, [">= 0"])
+      s.add_dependency(%q<psych>, [">= 0"])
+      s.add_dependency(%q<rubysl>, ["~> 2.0"])
+      s.add_dependency(%q<staffomatic-client-ruby>, [">= 0"])
+      s.add_dependency(%q<jeweler>, [">= 0"])
+      s.add_dependency(%q<awesome_print>, [">= 0"])
+      s.add_dependency(%q<guard-rspec>, [">= 0"])
+      s.add_dependency(%q<hirb-unicode>, [">= 0"])
+      s.add_dependency(%q<pry>, [">= 0"])
+      s.add_dependency(%q<redcarpet>, [">= 0"])
+      s.add_dependency(%q<wirb>, [">= 0"])
+      s.add_dependency(%q<wirble>, [">= 0"])
+      s.add_dependency(%q<yard>, [">= 0"])
       s.add_dependency(%q<shoulda>, [">= 0"])
       s.add_dependency(%q<rdoc>, ["~> 3.12"])
       s.add_dependency(%q<bundler>, ["~> 1.0"])
-      s.add_dependency(%q<jeweler>, ["~> 2.0.1"])
       s.add_dependency(%q<simplecov>, [">= 0"])
     end
   else
+    s.add_dependency(%q<jruby-openssl>, [">= 0"])
+    s.add_dependency(%q<rake>, [">= 0"])
+    s.add_dependency(%q<psych>, [">= 0"])
+    s.add_dependency(%q<rubysl>, ["~> 2.0"])
+    s.add_dependency(%q<staffomatic-client-ruby>, [">= 0"])
+    s.add_dependency(%q<jeweler>, [">= 0"])
+    s.add_dependency(%q<awesome_print>, [">= 0"])
+    s.add_dependency(%q<guard-rspec>, [">= 0"])
+    s.add_dependency(%q<hirb-unicode>, [">= 0"])
+    s.add_dependency(%q<pry>, [">= 0"])
+    s.add_dependency(%q<redcarpet>, [">= 0"])
+    s.add_dependency(%q<wirb>, [">= 0"])
+    s.add_dependency(%q<wirble>, [">= 0"])
+    s.add_dependency(%q<yard>, [">= 0"])
     s.add_dependency(%q<shoulda>, [">= 0"])
     s.add_dependency(%q<rdoc>, ["~> 3.12"])
     s.add_dependency(%q<bundler>, ["~> 1.0"])
-    s.add_dependency(%q<jeweler>, ["~> 2.0.1"])
     s.add_dependency(%q<simplecov>, [">= 0"])
   end
 end
