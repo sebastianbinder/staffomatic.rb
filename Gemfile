@@ -1,14 +1,37 @@
 source "http://rubygems.org"
-# Add dependencies required to use your gem here.
-# Example:
-#   gem "activesupport", ">= 2.3.5"
 
-# Add dependencies to develop your gem here.
-# Include everything needed to run rake, tests, features, etc.
+source 'https://rubygems.org'
+
+gem 'jruby-openssl', :platforms => :jruby
+gem 'rake'
+
 group :development do
-  gem "shoulda", ">= 0"
-  gem "rdoc", "~> 3.12"
-  gem "bundler", "~> 1.0"
-  gem "jeweler", "~> 2.0.1"
-  gem "simplecov", ">= 0"
+  gem "jeweler"
+  gem 'awesome_print', :require => 'ap'
+  gem 'guard-rspec'
+  gem 'hirb-unicode'
+  gem 'pry'
+  gem 'redcarpet'
+  gem 'wirb'
+  gem 'wirble'
+  gem 'yard'
 end
+
+group :test do
+  gem 'coveralls', :require => false
+  gem 'json', '~> 1.7', :platforms => [:ruby_18, :jruby]
+  gem 'mime-types', '< 2.0.0'
+  gem 'netrc', '~> 0.7.7'
+  gem 'rb-fsevent', '~> 0.9'
+  gem 'rspec', '~> 3.0.0'
+  gem 'simplecov', :require => false
+  gem 'vcr', '~> 2.9.2'
+  gem 'webmock', '>= 1.9'
+end
+
+platforms :rbx do
+  gem 'psych'
+  gem 'rubysl', '~> 2.0'
+end
+
+gemspec
