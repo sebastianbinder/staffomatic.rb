@@ -26,7 +26,7 @@ All API usage happens through Staffomatic applications, please get in contact wi
         Staffomatic::Session.setup(api_key: ENV['STAFFOMATIC_API_KEY'], secret: ENV['STAFFOMATIC_SHARED_SECRET'])
 
 3.  In order to access an account's data, apps need an access token from that specific account. This is a two-stage process.
-    Before interacting with a shop for the first time an app should redirect the user to the following URL:
+    Before interacting with a account for the first time an app should redirect the user to the following URL:
 
         GET https://ACCOUNT_SUBDOMAIN.staffomatic.com/api/v3/oauth/authorize
 
@@ -76,7 +76,7 @@ All API usage happens through Staffomatic applications, please get in contact wi
 
         Staffomatic::Base.activate_session(session)
 
-6. Now you're ready to make authorized API requests to your shop!
+6. Now you're ready to make authorized API requests to your account!
 
 
         account = Staffomatic::Account.current
