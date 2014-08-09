@@ -21,9 +21,9 @@ All API usage happens through Staffomatic applications, please get in contact wi
 
 1. Create an Staffomatic-App (Please contact us, we will send you the credentials)
 
-2. Supply two parameters to the Session class before you instantiate it:
+2. Supply two parameters to the Client class before you instantiate it:
 
-        Staffomatic::Session.setup(api_key: ENV['STAFFOMATIC_API_KEY'], secret: ENV['STAFFOMATIC_SHARED_SECRET'])
+        Staffomatic::Client.setup(api_key: ENV['STAFFOMATIC_API_KEY'], secret: ENV['STAFFOMATIC_SHARED_SECRET'])
 
 3.  In order to access an account's data, apps need an access token from that specific account. This is a two-stage process.
     Before interacting with a account for the first time an app should redirect the user to the following URL:
@@ -38,13 +38,13 @@ All API usage happens through Staffomatic applications, please get in contact wi
       Defaults to the URL specified in the application settings and must be the
       host as that URL.
 
-    First instantiate your session object:
+    First instantiate your client object:
 
-        session = Staffomatic::Session.new("ACCOUNT_SUBDOMAIN.staffomatic.com")
+        client = Staffomatic::Client.new("ACCOUNT_SUBDOMAIN.staffomatic.com")
 
     Then call:
 
-        permission_url = session.create_permission_url([], "https://my_redirect_uri.com")
+        permission_url = client.create_permission_url([], "https://my_redirect_uri.com")
 
 4.  Once authorized, the account redirects the owner to the return URL of your application with a parameter
     named 'code'. This is a temporary token that the app can exchange for a permanent access token. Make the following call:
@@ -65,16 +65,16 @@ All API usage happens through Staffomatic applications, please get in contact wi
     Pass all the params received from the previous call and the method will verify the params,
     extract the temp code and then request your token:
 
-        token = session.request_token(params)
+        token = client.request_token(params)
 
-    This method will save the token to the session object and return it.
-    For future sessions simply pass the token in when creating the session object:
+    This method will save the token to the client object and return it.
+    For future clients simply pass the token in when creating the client object:
 
-        session = Staffomatic::Session.new("ACCOUNT_SUBDOMAIN.staffomatic.com", token)
+        client = Staffomatic::Client.new("ACCOUNT_SUBDOMAIN.staffomatic.com", token)
 
-5. The session must be activated before use:
+5. The client must be activated before use:
 
-        Staffomatic::Base.activate_session(session)
+        Staffomatic::Base.activate_client(client)
 
 6. Now you're ready to make authorized API requests to your account!
 
