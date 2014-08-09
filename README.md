@@ -1,4 +1,4 @@
-staffomatic-client-ruby
+staffomatic.rb
 =======================
 
 A Ruby API wrapper for STAFFOMATIC. Super Simple Employee Scheduling. https://staffomatic.com

@@ -1,52 +1,25 @@
-# encoding: utf-8
-
-require 'rubygems'
-require 'bundler'
-begin
-  Bundler.setup(:default, :development)
-rescue Bundler::BundlerError => e
-  $stderr.puts e.message
-  $stderr.puts "Run `bundle install` to install missing gems"
-  exit e.status_code
-end
-require 'rake'
-
-require 'jeweler'
-Jeweler::Tasks.new do |gem|
-  # gem is a Gem::Specification... see http://guides.rubygems.org/specification-reference/ for more options
-  gem.name = "staffomatic-client-ruby"
-  gem.homepage = "http://github.com/fluxsaas/staffomatic-client-ruby"
-  gem.license = "MIT"
-  gem.summary = %Q{A Ruby API wrapper for STAFFOMATIC. Super Simple Employee Scheduling. https://staffomatic.com}
-  gem.description = %Q{TODO: longer description of your gem}
-  gem.email = "kalle@easypep.de"
-  gem.authors = ["Kalle Saas"]
-  # dependencies defined in Gemfile
-end
-# for now, keep it privater (kind of):
-# Jeweler::RubygemsDotOrgTasks.new
-
 require 'rake/testtask'
-Rake::TestTask.new(:test) do |test|
-  test.libs << 'lib' << 'test'
-  test.pattern = 'test/**/test_*.rb'
-  test.verbose = true
+require 'bundler'
+Bundler::GemHelper.install_tasks
+
+Rake::TestTask.new :spec do |t|
+  t.libs << 'spec'
+  t.pattern = 'spec/**/*_spec.rb'
+  t.warning = true
 end
 
-desc "Code coverage detail"
-task :simplecov do
-  ENV['COVERAGE'] = "true"
-  Rake::Task['test'].execute
-end
+task :default => :spec
 
-task :default => :test
-
-require 'rdoc/task'
-Rake::RDocTask.new do |rdoc|
-  version = File.exist?('VERSION') ? File.read('VERSION') : ""
-
-  rdoc.rdoc_dir = 'rdoc'
-  rdoc.title = "staffomatic-client-ruby #{version}"
-  rdoc.rdoc_files.include('README*')
-  rdoc.rdoc_files.include('lib/**/*.rb')
+namespace :doc do
+  begin
+    require 'yard'
+    YARD::Rake::YardocTask.new do |task|
+      task.files   = ['README.md', 'LICENSE.md', 'lib/**/*.rb']
+      task.options = [
+        '--output-dir', 'doc/yard',
+        '--markup', 'markdown',
+      ]
+    end
+  rescue LoadError
+  end
 end

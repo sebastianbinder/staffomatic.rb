@@ -1,34 +1,22 @@
-require 'simplecov'
+require 'cgi'
+require 'minitest/autorun'
+require 'minitest/spec'
+require 'webmock'
+require 'staffomatic'
 
-module SimpleCov::Configuration
-  def clean_filters
-    @filters = []
+module SpecHelper
+  include WebMock::API
+
+  def stub_api_request method, uri, fixture = nil
+    uri = API.base_uri + uri
+    uri.user = CGI.escape Recurly.api_key
+    uri.password = ''
+    response = if block_given?
+      yield
+    else
+      File.read File.expand_path("../fixtures/#{fixture}.xml", __FILE__)
+    end
+    stub_request(method, uri.to_s).to_return response
   end
 end
-
-SimpleCov.configure do
-  clean_filters
-  load_adapter 'test_frameworks'
-end
-
-ENV["COVERAGE"] && SimpleCov.start do
-  add_filter "/.rvm/"
-end
-require 'rubygems'
-require 'bundler'
-begin
-  Bundler.setup(:default, :development)
-rescue Bundler::BundlerError => e
-  $stderr.puts e.message
-  $stderr.puts "Run `bundle install` to install missing gems"
-  exit e.status_code
-end
-require 'test/unit'
-require 'shoulda'
-
-$LOAD_PATH.unshift(File.join(File.dirname(__FILE__), '..', 'lib'))
-$LOAD_PATH.unshift(File.dirname(__FILE__))
-require 'staffomatic-client-ruby'
-
-class Test::Unit::TestCase
-end
+include SpecHelper
