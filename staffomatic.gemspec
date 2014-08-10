@@ -1,35 +1,22 @@
-# -*- encoding: utf-8 -*-
+# coding: utf-8
 lib = File.expand_path('../lib', __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 require 'staffomatic/version'
 
-Gem::Specification.new do |s|
-  s.name = "staffomatic.rb"
-  s.version = Staffomatic::VERSION.dup
-  s.required_rubygems_version = '>= 1.3.5'
-  s.authors = ["Kalle Saas"]
-  s.date = "2014-08-09"
-  s.description = "A Ruby API wrapper for STAFFOMATIC. Super Simple Employee Scheduling. https://staffomatic.com"
-  s.email = "kalle@easypep.de"
-  s.files = [
-    ".document",
-    "Gemfile",
-    "Gemfile.lock",
-    "LICENSE",
-    "README.md",
-    "Rakefile",
-    "lib/staffomatic.rb",
-    "staffomatic.gemspec",
-    "spec/helper.rb",
-    "spec/staffomatic_spec.rb"
-  ]
-  s.homepage = "http://github.com/fluxsaas/staffomatic.rb"
-  s.licenses = ["MIT"]
-  s.require_paths = ["lib"]
-  s.rubygems_version = "2.0.3"
-  s.summary = "A Ruby API wrapper for STAFFOMATIC. Super Simple Employee Scheduling. https://staffomatic.com"
-
-  s.add_development_dependency 'bundler', '~> 1.6'
-  s.add_development_dependency 'minitest', '~> 5.4.0'
-  s.add_development_dependency 'webmock',  '~> 1.18.0'
+Gem::Specification.new do |spec|
+  spec.add_development_dependency 'bundler', '~> 1.0'
+  spec.add_dependency 'sawyer', '~> 0.5.3'
+  spec.authors = ["Wynn Netherland", "Erik Michaels-Ober", "Clint Shryock"]
+  spec.description = %q{Simple wrapper for the Staffomatic API}
+  spec.email = ['wynn.netherland@gmail.com', 'sferik@gmail.com', 'clint@ctshryock.com']
+  spec.files = %w(.document CONTRIBUTING.md LICENSE.md README.md Rakefile staffomatic.gemspec)
+  spec.files += Dir.glob("lib/**/*.rb")
+  spec.homepage = 'https://staffomatic.com/staffomatic/staffomatic.rb'
+  spec.licenses = ['MIT']
+  spec.name = 'staffomatic'
+  spec.require_paths = ['lib']
+  spec.required_ruby_version = '>= 1.9.2'
+  spec.required_rubygems_version = '>= 1.3.5'
+  spec.summary = "Ruby toolkit for working with the Staffomatic API"
+  spec.version = Staffomatic::VERSION.dup
 end

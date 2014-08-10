@@ -1,13 +1,10 @@
-require 'rake/testtask'
 require 'bundler'
 Bundler::GemHelper.install_tasks
 
-Rake::TestTask.new :spec do |t|
-  t.libs << 'spec'
-  t.pattern = 'spec/**/*_spec.rb'
-  t.warning = true
-end
+require 'rspec/core/rake_task'
+RSpec::Core::RakeTask.new(:spec)
 
+task :test => :spec
 task :default => :spec
 
 namespace :doc do
