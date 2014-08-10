@@ -6,9 +6,9 @@ Add authentication methods
 
   * email, password
 
-### Client
+### Staffomatic.rb
 
-* push `OAuth access tokens` as default.
+* push `OAuth access tokens` as default auth method.
 
 * Change `Staffomatic.configure` from
 
@@ -18,6 +18,7 @@ Add authentication methods
     c.password = 'c0d3b4ssssss!'
   end
   ```
+
 to:
 
   ```ruby
@@ -39,13 +40,9 @@ to:
 
       client.create_authorization(:scopes => ["user"], :note => "Name of token")
 
-* remove .netrc functionality. it's nice but just a nice to have
-
 * what is `web_endpoint`? removeit!
 
-
 * `Hypermedia in Staffomatic` nice feature. what todo woth it?
-
 
 * `:oauth_token` is now `:access_token` ?
 

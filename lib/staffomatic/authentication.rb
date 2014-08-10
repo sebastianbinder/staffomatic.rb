@@ -51,23 +51,5 @@ module Staffomatic
       end
     end
 
-    def login_from_netrc
-      return unless netrc?
-
-      require 'netrc'
-      info = Netrc.read netrc_file
-      netrc_host = URI.parse(api_endpoint).host
-      creds = info[netrc_host]
-      if creds.nil?
-        # creds will be nil if there is no netrc for this end point
-        staffomatic_warn "Error loading credentials from netrc file for #{api_endpoint}"
-      else
-        self.login = creds.shift
-        self.password = creds.shift
-      end
-    rescue LoadError
-      staffomatic_warn "Please install netrc gem for .netrc support"
-    end
-
   end
 end

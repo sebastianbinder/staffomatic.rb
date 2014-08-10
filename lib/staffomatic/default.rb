@@ -129,18 +129,6 @@ module Staffomatic
         ENV['STAFFOMATIC_WEB_ENDPOINT'] || WEB_ENDPOINT
       end
 
-      # Default behavior for reading .netrc file
-      # @return [Boolean]
-      def netrc
-        ENV['STAFFOMATIC_NETRC'] || false
-      end
-
-      # Default path for .netrc file
-      # @return [String]
-      def netrc_file
-        ENV['STAFFOMATIC_NETRC_FILE'] || File.join(ENV['HOME'].to_s, '.netrc')
-      end
-
     end
   end
 end

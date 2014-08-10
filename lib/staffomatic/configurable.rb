@@ -27,10 +27,6 @@ module Staffomatic
     # @!attribute middleware
     #   @see https://staffomatic.com/lostisland/faraday
     #   @return [Faraday::Builder or Faraday::RackBuilder] Configure middleware for Faraday
-    # @!attribute netrc
-    #   @return [Boolean] Instruct Staffomatic to get credentials from .netrc file
-    # @!attribute netrc_file
-    #   @return [String] Path to .netrc file. default: ~/.netrc
     # @!attribute [w] password
     #   @return [String] Staffomatic password for Basic Authentication
     # @!attribute per_page
@@ -45,7 +41,7 @@ module Staffomatic
 
     attr_accessor :access_token, :auto_paginate, :client_id,
                   :client_secret, :default_media_type, :connection_options,
-                  :middleware, :netrc, :netrc_file,
+                  :middleware,
                   :per_page, :proxy, :user_agent
     attr_writer :password, :web_endpoint, :api_endpoint, :login
 
@@ -64,8 +60,6 @@ module Staffomatic
           :default_media_type,
           :login,
           :middleware,
-          :netrc,
-          :netrc_file,
           :per_page,
           :password,
           :proxy,
@@ -104,10 +98,6 @@ module Staffomatic
       @login ||= begin
         user.login if token_authenticated?
       end
-    end
-
-    def netrc?
-      !!@netrc
     end
 
     private

@@ -85,25 +85,6 @@ describe Staffomatic::Client do
         expect(inspected).not_to include("87614b09dd141c22800f96f11737ade5226d7ba8")
       end
 
-      describe "with .netrc" do
-        before do
-          File.chmod(0600, File.join(fixture_path, '.netrc'))
-        end
-        
-        it "can read .netrc files" do
-          Staffomatic.reset!
-          client = Staffomatic::Client.new(:netrc => true, :netrc_file => File.join(fixture_path, '.netrc'))
-          expect(client.login).to eq("sferik")
-          expect(client.instance_variable_get(:"@password")).to eq("il0veruby")
-        end
-
-        it "can read non-standard API endpoint creds from .netrc" do
-          Staffomatic.reset!
-          client = Staffomatic::Client.new(:netrc => true, :netrc_file => File.join(fixture_path, '.netrc'), :api_endpoint => 'http://api.staffomatic.dev')
-          expect(client.login).to eq("defunkt")
-          expect(client.instance_variable_get(:"@password")).to eq("il0veruby")
-        end
-      end
     end
   end
 

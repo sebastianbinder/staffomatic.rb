@@ -29,8 +29,6 @@ module Staffomatic
       Staffomatic::Configurable.keys.each do |key|
         instance_variable_set(:"@#{key}", options[key] || Staffomatic.instance_variable_get(:"@#{key}"))
       end
-
-      login_from_netrc unless user_authenticated? || application_authenticated?
     end
 
     # Compares client options to a Hash of requested options
