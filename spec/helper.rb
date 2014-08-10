@@ -91,31 +91,31 @@ VCR.configure do |c|
 end
 
 def test_staffomatic_login
-  ENV.fetch 'STAFFOMATIC_TEST_GITHUB_LOGIN', 'api-padawan'
+  ENV.fetch 'STAFFOMATIC_TEST_LOGIN', 'api-padawan'
 end
 
 def test_staffomatic_password
-  ENV.fetch 'STAFFOMATIC_TEST_GITHUB_PASSWORD', 'wow_such_password'
+  ENV.fetch 'STAFFOMATIC_TEST_PASSWORD', 'wow_such_password'
 end
 
 def test_staffomatic_token
-  ENV.fetch 'STAFFOMATIC_TEST_GITHUB_TOKEN', 'x' * 40
+  ENV.fetch 'STAFFOMATIC_TEST_TOKEN', 'x' * 40
 end
 
 def test_staffomatic_client_id
-  ENV.fetch 'STAFFOMATIC_TEST_GITHUB_CLIENT_ID', 'x' * 21
+  ENV.fetch 'STAFFOMATIC_TEST_CLIENT_ID', 'x' * 21
 end
 
 def test_staffomatic_client_secret
-  ENV.fetch 'STAFFOMATIC_TEST_GITHUB_CLIENT_SECRET', 'x' * 40
+  ENV.fetch 'STAFFOMATIC_TEST_CLIENT_SECRET', 'x' * 40
 end
 
 def test_staffomatic_repository
-  ENV.fetch 'STAFFOMATIC_TEST_GITHUB_REPOSITORY', 'api-sandbox'
+  ENV.fetch 'STAFFOMATIC_TEST_REPOSITORY', 'api-sandbox'
 end
 
 def test_staffomatic_org
-  ENV.fetch 'STAFFOMATIC_TEST_GITHUB_ORGANIZATION', 'api-playground'
+  ENV.fetch 'STAFFOMATIC_TEST_ORGANIZATION', 'api-playground'
 end
 
 def stub_delete(url)

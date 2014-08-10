@@ -393,20 +393,20 @@ cassettes with:
 Staffomatic uses environmental variables for storing credentials used in testing.
 If you are testing an API endpoint that doesn't require authentication, you
 can get away without any additional configuration. For the most part, tests
-use an authenticated client, using a token stored in `ENV['STAFFOMATIC_TEST_GITHUB_TOKEN']`.
+use an authenticated client, using a token stored in `ENV['STAFFOMATIC_TEST_TOKEN']`.
 There are several different authenticating method's used accross the api.
 Here is the full list of configurable environmental variables for testing
 Staffomatic:
 
 ENV Variable | Description |
 :-------------------|:-----------------|
-`STAFFOMATIC_TEST_GITHUB_LOGIN`| Staffomatic login name (preferably one created specifically for testing against).
-`STAFFOMATIC_TEST_GITHUB_PASSWORD`| Password for the test Staffomatic login.
-`STAFFOMATIC_TEST_GITHUB_TOKEN` | [Personal Access Token](https://staffomatic.com/blog/1509-personal-api-tokens) for the test Staffomatic login.
-`STAFFOMATIC_TEST_GITHUB_CLIENT_ID` | Test OAuth application client id.
-`STAFFOMATIC_TEST_GITHUB_CLIENT_SECRET` | Test OAuth application client secret.
-`STAFFOMATIC_TEST_GITHUB_REPOSITORY` | Test repository to perform destructive actions against, this should not be set to any repository of importance. **Automatically created by the test suite if nonexistent** Default: `api-sandbox`
-`STAFFOMATIC_TEST_GITHUB_ORGANIZATION` | Test organization.
+`STAFFOMATIC_TEST_LOGIN`| Staffomatic login name (preferably one created specifically for testing against).
+`STAFFOMATIC_TEST_PASSWORD`| Password for the test Staffomatic login.
+`STAFFOMATIC_TEST_TOKEN` | [Personal Access Token](https://staffomatic.com/blog/1509-personal-api-tokens) for the test Staffomatic login.
+`STAFFOMATIC_TEST_CLIENT_ID` | Test OAuth application client id.
+`STAFFOMATIC_TEST_CLIENT_SECRET` | Test OAuth application client secret.
+`STAFFOMATIC_TEST_REPOSITORY` | Test repository to perform destructive actions against, this should not be set to any repository of importance. **Automatically created by the test suite if nonexistent** Default: `api-sandbox`
+`STAFFOMATIC_TEST_ORGANIZATION` | Test organization.
 
 Since we periodically refresh our cassettes, please keep some points in mind
 when writing new specs.
