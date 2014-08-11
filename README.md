@@ -2,9 +2,6 @@
 
 Ruby toolkit for the Staffomatic API.
 
-![Logo][logo]
-[logo]: http://cl.ly/image/3Y013H0A2z3z/gundam-ruby.png
-
 ## Philosophy
 
 API wrappers [should reflect the idioms of the language in which they were
