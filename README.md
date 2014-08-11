@@ -400,7 +400,7 @@ Staffomatic:
 
 ENV Variable | Description |
 :-------------------|:-----------------|
-`STAFFOMATIC_TEST_LOGIN`| Staffomatic login name (preferably one created specifically for testing against).
+`STAFFOMATIC_TEST_EMAIL`| Staffomatic login email (preferably one created specifically for testing against).
 `STAFFOMATIC_TEST_PASSWORD`| Password for the test Staffomatic login.
 `STAFFOMATIC_TEST_TOKEN` | [Personal Access Token](https://staffomatic.com/blog/1509-personal-api-tokens) for the test Staffomatic login.
 `STAFFOMATIC_TEST_CLIENT_ID` | Test OAuth application client id.

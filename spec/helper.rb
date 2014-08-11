@@ -19,7 +19,7 @@ WebMock.disable_net_connect!(:allow => 'coveralls.io')
 RSpec.configure do |config|
   config.raise_errors_for_deprecations!
   config.before(:all) do
-    @test_repo = "#{test_staffomatic_login}/#{test_staffomatic_repository}"
+    @test_repo = "#{test_staffomatic_email}/#{test_staffomatic_repository}"
     @test_org_repo = "#{test_staffomatic_org}/#{test_staffomatic_repository}"
   end
 end
@@ -28,7 +28,7 @@ require 'vcr'
 VCR.configure do |c|
   c.configure_rspec_metadata!
   c.filter_sensitive_data("<GITHUB_LOGIN>") do
-    test_staffomatic_login
+    test_staffomatic_email
   end
   c.filter_sensitive_data("<GITHUB_PASSWORD>") do
     test_staffomatic_password
@@ -61,7 +61,7 @@ VCR.configure do |c|
       :auto_init => true
     }
 
-    test_repo = "#{test_staffomatic_login}/#{test_staffomatic_repository}"
+    test_repo = "#{test_staffomatic_email}/#{test_staffomatic_repository}"
     if !oauth_client.repository?(test_repo, options)
       Staffomatic.staffomatic_warn "NOTICE: Creating #{test_repo} test repository."
       oauth_client.create_repository(test_staffomatic_repository, options)
@@ -90,12 +90,16 @@ VCR.configure do |c|
   c.hook_into :webmock
 end
 
-def test_staffomatic_login
-  ENV.fetch 'STAFFOMATIC_TEST_LOGIN', 'api-padawan'
+def test_staffomatic_email
+  ENV.fetch 'STAFFOMATIC_TEST_EMAIL', 'api-padawan'
 end
 
 def test_staffomatic_password
   ENV.fetch 'STAFFOMATIC_TEST_PASSWORD', 'wow_such_password'
+end
+
+def test_staffomatic_subdomain
+  ENV.fetch 'STAFFOMATIC_TEST_SUBDOMAIN', 'demo'
 end
 
 def test_staffomatic_token
@@ -174,16 +178,16 @@ def basic_staffomatic_url(path, options = {})
   uri = Addressable::URI.parse(url)
   uri.path.gsub!("v3//", "v3/")
 
-  uri.user = options.fetch(:login, test_staffomatic_login)
+  uri.user     = options.fetch(:email, test_staffomatic_email)
   uri.password = options.fetch(:password, test_staffomatic_password)
-
   uri.to_s
 end
 
-def basic_auth_client(login = test_staffomatic_login, password = test_staffomatic_password )
+def basic_auth_client(email = test_staffomatic_email, password = test_staffomatic_password, subdomain = test_staffomatic_subdomain)
   client = Staffomatic.client
-  client.login = test_staffomatic_login
+  client.email = test_staffomatic_email
   client.password = test_staffomatic_password
+  client.subdomain = test_staffomatic_subdomain
 
   client
 end

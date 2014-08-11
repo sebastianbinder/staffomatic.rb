@@ -22,8 +22,8 @@ module Staffomatic
     # @!attribute connection_options
     #   @see https://staffomatic.com/lostisland/faraday
     #   @return [Hash] Configure connection options for Faraday
-    # @!attribute login
-    #   @return [String] Staffomatic username for Basic Authentication
+    # @!attribute email
+    #   @return [String] Staffomatic email for Basic Authentication
     # @!attribute middleware
     #   @see https://staffomatic.com/lostisland/faraday
     #   @return [Faraday::Builder or Faraday::RackBuilder] Configure middleware for Faraday
@@ -34,6 +34,8 @@ module Staffomatic
     # @!attribute proxy
     #   @see https://staffomatic.com/lostisland/faraday
     #   @return [String] URI for proxy server
+    # @!attribute subdomain
+    #   @return [String] Staffomatic subdomain for Basic Authentication
     # @!attribute user_agent
     #   @return [String] Configure User-Agent header for requests.
     # @!attribute web_endpoint
@@ -41,9 +43,8 @@ module Staffomatic
 
     attr_accessor :access_token, :auto_paginate, :client_id,
                   :client_secret, :default_media_type, :connection_options,
-                  :middleware,
-                  :per_page, :proxy, :user_agent
-    attr_writer :password, :web_endpoint, :api_endpoint, :login
+                  :middleware, :per_page, :proxy, :user_agent
+    attr_writer :password, :web_endpoint, :api_endpoint, :email, :subdomain
 
     class << self
 
@@ -58,11 +59,12 @@ module Staffomatic
           :client_secret,
           :connection_options,
           :default_media_type,
-          :login,
+          :email,
           :middleware,
           :per_page,
           :password,
           :proxy,
+          :subdomain,
           :user_agent,
           :web_endpoint
         ]
@@ -94,6 +96,7 @@ module Staffomatic
       File.join(@web_endpoint, "")
     end
 
+    # TODO: is that the login action?
     def login
       @login ||= begin
         user.login if token_authenticated?

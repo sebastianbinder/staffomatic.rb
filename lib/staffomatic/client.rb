@@ -154,7 +154,7 @@ module Staffomatic
         http.headers[:accept] = default_media_type
         http.headers[:user_agent] = user_agent
         if basic_authenticated?
-          http.basic_auth(@login, @password)
+          http.basic_auth(@email, @password)
         elsif token_authenticated?
           http.authorization 'token', @access_token
         elsif application_authenticated?
@@ -202,12 +202,12 @@ module Staffomatic
       yield app_client if block_given?
     end
 
-    # Set username for authentication
+    # Set email for authentication
     #
-    # @param value [String] Staffomatic username
-    def login=(value)
+    # @param value [String] Staffomatic email
+    def email=(value)
       reset_agent
-      @login = value
+      @email = value
     end
 
     # Set password for authentication
@@ -216,6 +216,14 @@ module Staffomatic
     def password=(value)
       reset_agent
       @password = value
+    end
+
+    # Set subdomain for authentication
+    #
+    # @param value [String] Staffomatic subdomain
+    def subdomain=(value)
+      reset_agent
+      @subdomain = value
     end
 
     # Set OAuth access token for authentication
@@ -266,7 +274,6 @@ module Staffomatic
           options[:headers][:accept] = accept
         end
       end
-
       @last_response = response = agent.call(method, URI::Parser.new.escape(path.to_s), data, options)
       response.data
     end

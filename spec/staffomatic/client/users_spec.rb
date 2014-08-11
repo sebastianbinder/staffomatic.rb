@@ -17,24 +17,24 @@ describe Staffomatic::Client::Users do
   describe ".user", :vcr do
     it "returns a user" do
       user = Staffomatic.client.user("sferik")
-      expect(user.login).to eq('sferik')
+      expect(user.email).to eq('kalle@easypep.de')
     end
     it "returns the authenticated user" do
       user = @client.user
-      expect(user.login).to eq(test_staffomatic_login)
+      expect(user.email).to eq(test_staffomatic_email)
     end
   end # .user
 
   describe ".validate_credentials", :vcr do
-    it "validates username and password" do
-      expect(Staffomatic.validate_credentials(:login => test_staffomatic_login, :password => test_staffomatic_password)).to be true
+    it "validates email password and subdomain" do
+      expect(Staffomatic.validate_credentials(:email => test_staffomatic_email, :password => test_staffomatic_password, :subdomain => test_staffomatic_subdomain)).to be true
     end
   end # .validate_credentials
 
   describe ".update_user", :vcr do
     it "updates a user profile" do
       user = @client.update_user(:location => "San Francisco, CA", :hireable => false)
-      expect(user.login).to eq(test_staffomatic_login)
+      expect(user.email).to eq(test_staffomatic_email)
       assert_requested :patch, staffomatic_url("/user")
     end
   end # .update_user

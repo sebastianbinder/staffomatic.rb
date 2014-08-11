@@ -8,7 +8,7 @@ module Staffomatic
   module Default
 
     # Default API endpoint
-    API_ENDPOINT = "https://api.staffomatic.com".freeze
+    API_ENDPOINT = "https://staffomatic.com".freeze
 
     # Default User Agent header string
     USER_AGENT   = "Staffomatic Ruby Gem #{Staffomatic::VERSION}".freeze
@@ -84,10 +84,16 @@ module Staffomatic
         ENV['STAFFOMATIC_DEFAULT_MEDIA_TYPE'] || MEDIA_TYPE
       end
 
-      # Default Staffomatic username for Basic Auth from ENV
+      # Default Staffomatic email for Basic Auth from ENV
       # @return [String]
-      def login
-        ENV['STAFFOMATIC_LOGIN']
+      def email
+        ENV['STAFFOMATIC_EMAIL']
+      end
+
+      # Default Staffomatic email for Basic Auth from ENV
+      # @return [String]
+      def subdomain
+        ENV['STAFFOMATIC_SUBDOMAIN']
       end
 
       # Default middleware stack for Faraday::Connection

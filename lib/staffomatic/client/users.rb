@@ -24,7 +24,7 @@ module Staffomatic
 
       # Get a single user
       #
-      # @param user [Integer, String] Staffomatic user login or id.
+      # @param user [Integer, String] Staffomatic user id.
       # @return [Sawyer::Resource]
       # @see https://developer.github.com/v3/users/#get-a-single-user
       # @see https://developer.github.com/v3/users/#get-the-authenticated-user
@@ -56,11 +56,12 @@ module Staffomatic
         post "#{web_endpoint}login/oauth/access_token", options
       end
 
-      # Validate user username and password
+      # Validate user email password and subdomain
       #
       # @param options [Hash] User credentials
-      # @option options [String] :login Staffomatic login
+      # @option options [String] :email Staffomatic email
       # @option options [String] :password Staffomatic password
+      # @option options [String] :subdomain Staffomatic subdomain
       # @return [Boolean] True if credentials are valid
       def validate_credentials(options = {})
         !self.class.new(options).user.nil?

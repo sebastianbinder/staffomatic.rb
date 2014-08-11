@@ -39,8 +39,9 @@ describe Staffomatic::Client do
         @opts = {
           :connection_options => {:ssl => {:verify => false}},
           :per_page => 40,
-          :login    => "defunkt",
-          :password => "il0veruby"
+          :email    => "kalle@easypep.de",
+          :password => "welcome",
+          :account  => "demo"
         }
       end
 
@@ -100,8 +101,8 @@ describe Staffomatic::Client do
       end
       it "sets basic auth creds with .configure" do
         Staffomatic.configure do |config|
-          config.login = 'pengwynn'
-          config.password = 'il0veruby'
+          config.email = 'kalle@easypep.de'
+          config.password = 'welcome'
         end
         expect(Staffomatic.client).to be_basic_authenticated
       end
@@ -143,8 +144,8 @@ describe Staffomatic::Client do
     describe "with class level config" do
       it "sets basic auth creds with .configure" do
         @client.configure do |config|
-          config.login = 'pengwynn'
-          config.password = 'il0veruby'
+          config.email = 'kalle@easypep.de'
+          config.password = 'welcome'
         end
         expect(@client).to be_basic_authenticated
       end
@@ -184,11 +185,11 @@ describe Staffomatic::Client do
     describe "when basic authenticated"  do
       it "makes authenticated calls" do
         Staffomatic.configure do |config|
-          config.login = 'pengwynn'
-          config.password = 'il0veruby'
+          config.email = 'kalle@easypep.de'
+          config.password = 'welcome'
         end
 
-        root_request = stub_get("https://pengwynn:il0veruby@api.staffomatic.com/")
+        root_request = stub_get("admin@demo.de:welcome@demo.staffomatic.com/api/")
         Staffomatic.client.get("/")
         assert_requested root_request
       end
@@ -206,7 +207,7 @@ describe Staffomatic::Client do
       it "fetches and memoizes login" do
         client = oauth_client
 
-        expect(client.login).to eq(test_staffomatic_login)
+        expect(client.login).to eq(test_staffomatic_email)
         assert_requested :get, staffomatic_url('/user')
       end
     end

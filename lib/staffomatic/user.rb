@@ -7,8 +7,6 @@ module Staffomatic
     # @return [String] User Api path
     def self.path user
       case user
-      when String
-        "users/#{user}"
       when Integer
         "user/#{user}"
       else
