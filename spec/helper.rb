@@ -91,15 +91,16 @@ VCR.configure do |c|
 end
 
 def test_staffomatic_email
-  ENV.fetch 'STAFFOMATIC_TEST_EMAIL', 'api-padawan'
+  ENV.fetch 'STAFFOMATIC_TEST_EMAIL', 'admin@demo.de'
 end
 
 def test_staffomatic_password
-  ENV.fetch 'STAFFOMATIC_TEST_PASSWORD', 'wow_such_password'
+  ENV.fetch 'STAFFOMATIC_TEST_PASSWORD', 'welcome'
 end
 
-def test_staffomatic_subdomain
-  ENV.fetch 'STAFFOMATIC_TEST_SUBDOMAIN', 'demo'
+# always with version specification
+def test_staffomatic_api_endpoint
+  ENV.fetch 'STAFFOMATIC_TEST_API_ENDPOINT', 'http://demo.staffomatic-api.dev/api/v3'
 end
 
 def test_staffomatic_token
@@ -166,7 +167,9 @@ end
 def staffomatic_url(url)
   return url if url =~ /^http/
 
-  url = File.join(Staffomatic.api_endpoint, url)
+  url.gsub!("/api/v3", "")
+
+  url = File.join(test_staffomatic_api_endpoint, url)
   uri = Addressable::URI.parse(url)
   uri.path.gsub!("v3//", "v3/")
 
@@ -174,7 +177,7 @@ def staffomatic_url(url)
 end
 
 def basic_staffomatic_url(path, options = {})
-  url = File.join(Staffomatic.api_endpoint, path)
+  url = File.join(test_staffomatic_api_endpoint, path)
   uri = Addressable::URI.parse(url)
   uri.path.gsub!("v3//", "v3/")
 
@@ -183,17 +186,19 @@ def basic_staffomatic_url(path, options = {})
   uri.to_s
 end
 
-def basic_auth_client(email = test_staffomatic_email, password = test_staffomatic_password, subdomain = test_staffomatic_subdomain)
+def basic_auth_client(email = test_staffomatic_email, password = test_staffomatic_password)
   client = Staffomatic.client
   client.email = test_staffomatic_email
   client.password = test_staffomatic_password
-  client.subdomain = test_staffomatic_subdomain
 
   client
 end
 
 def oauth_client
-  Staffomatic::Client.new(:access_token => test_staffomatic_token)
+  Staffomatic::Client.new(
+    :access_token => test_staffomatic_token,
+    :api_endpoint => test_staffomatic_api_endpoint
+  )
 end
 
 def use_vcr_placeholder_for(text, replacement)

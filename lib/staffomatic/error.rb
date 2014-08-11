@@ -48,11 +48,7 @@ module Staffomatic
     # Returns most appropriate error for 401 HTTP status code
     # @private
     def self.error_for_401(headers)
-      if Staffomatic::OneTimePasswordRequired.required_header(headers)
-        Staffomatic::OneTimePasswordRequired
-      else
-        Staffomatic::Unauthorized
-      end
+      Staffomatic::Unauthorized
     end
 
     # Returns most appropriate error for 403 HTTP status code
@@ -148,33 +144,6 @@ module Staffomatic
 
   # Raised when Staffomatic returns a 401 HTTP status code
   class Unauthorized < ClientError; end
-
-  # Raised when Staffomatic returns a 401 HTTP status code
-  # and headers include "X-Staffomatic-OTP"
-  class OneTimePasswordRequired < ClientError
-    #@private
-    OTP_DELIVERY_PATTERN = /required; (\w+)/i
-
-    #@private
-    def self.required_header(headers)
-      OTP_DELIVERY_PATTERN.match headers['X-Staffomatic-OTP'].to_s
-    end
-
-    # Delivery method for the user's OTP
-    #
-    # @return [String]
-    def password_delivery
-      @password_delivery ||= delivery_method_from_header
-    end
-
-    private
-
-    def delivery_method_from_header
-      if match = self.class.required_header(@response[:response_headers])
-        match[1]
-      end
-    end
-  end
 
   # Raised when Staffomatic returns a 403 HTTP status code
   class Forbidden < ClientError; end

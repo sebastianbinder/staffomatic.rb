@@ -4,12 +4,12 @@ module Staffomatic
   module Authentication
 
     # Indicates if the client was supplied  Basic Auth
-    # email, password and subdomain
+    # email, password
     #
     # @see https://developer.github.com/v3/#authentication
     # @return [Boolean]
     def basic_authenticated?
-      !!(@email && @password && @subdomain)
+      !!(@email && @password)
     end
 
     # Indicates if the client was supplied an OAuth
@@ -22,7 +22,7 @@ module Staffomatic
     end
 
     # Indicates if the client was supplied an OAuth
-    # access token or Basic Auth email password and subdomain
+    # access token or Basic Auth email and password
     #
     # @see https://developer.github.com/v3/#authentication
     # @return [Boolean]

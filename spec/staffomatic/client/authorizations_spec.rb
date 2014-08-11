@@ -1,6 +1,7 @@
 require 'helper'
 
 describe Staffomatic::Client::Authorizations do
+  pending("Authorizations not yet implemented!")
 
   before do
     Staffomatic.reset!

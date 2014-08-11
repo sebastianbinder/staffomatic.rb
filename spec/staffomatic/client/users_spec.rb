@@ -9,15 +9,15 @@ describe Staffomatic::Client::Users do
 
   describe ".all_users", :vcr do
     it "returns all Staffomatic users" do
-      users = Staffomatic.all_users
+      users = @client.all_users
       expect(users).to be_kind_of Array
     end
   end # .all_users
 
   describe ".user", :vcr do
     it "returns a user" do
-      user = Staffomatic.client.user("sferik")
-      expect(user.email).to eq('kalle@easypep.de')
+      user = @client.user(493)
+      expect(user.email).to eq('admin@demo.de')
     end
     it "returns the authenticated user" do
       user = @client.user
@@ -26,14 +26,14 @@ describe Staffomatic::Client::Users do
   end # .user
 
   describe ".validate_credentials", :vcr do
-    it "validates email password and subdomain" do
-      expect(Staffomatic.validate_credentials(:email => test_staffomatic_email, :password => test_staffomatic_password, :subdomain => test_staffomatic_subdomain)).to be true
+    it "validates email and  password" do
+      expect(Staffomatic.validate_credentials(:email => test_staffomatic_email, :password => test_staffomatic_password)).to be true
     end
   end # .validate_credentials
 
   describe ".update_user", :vcr do
     it "updates a user profile" do
-      user = @client.update_user(:location => "San Francisco, CA", :hireable => false)
+      user = @client.update_user(:city => "San Francisco", :locale => 'de')
       expect(user.email).to eq(test_staffomatic_email)
       assert_requested :patch, staffomatic_url("/user")
     end

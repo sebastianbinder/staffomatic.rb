@@ -156,7 +156,9 @@ module Staffomatic
         if basic_authenticated?
           http.basic_auth(@email, @password)
         elsif token_authenticated?
-          http.authorization 'token', @access_token
+          # Original octocit implementation: http.authorization 'token', @access_token
+          # Doorkeeper aka Oauth `http://oauth.net/documentation/`
+          http.headers['Authorization'] = "Bearer #{@access_token}"
         elsif application_authenticated?
           http.params = http.params.merge application_authentication
         end
@@ -167,7 +169,7 @@ module Staffomatic
     #
     # @return [Sawyer::Resource]
     def root
-      get "/"
+      get "/api"
     end
 
     # Response for last HTTP request
@@ -184,11 +186,11 @@ module Staffomatic
     #   Staffomatic.client_secret = "bar"
     #
     #   # GET https://api.staffomatic.com/?client_id=foo&client_secret=bar
-    #   Staffomatic.get "/"
+    #   Staffomatic.get "/api"
     #
     #   Staffomatic.client.as_app do |client|
     #     # GET https://foo:bar@api.staffomatic.com/
-    #     client.get "/"
+    #     client.get "/api"
     #   end
     def as_app(key = client_id, secret = client_secret, &block)
       if key.to_s.empty? || secret.to_s.empty?
@@ -196,7 +198,7 @@ module Staffomatic
       end
       app_client = self.dup
       app_client.client_id = app_client.client_secret = nil
-      app_client.login    = key
+      app_client.email    = key
       app_client.password = secret
 
       yield app_client if block_given?
@@ -216,14 +218,6 @@ module Staffomatic
     def password=(value)
       reset_agent
       @password = value
-    end
-
-    # Set subdomain for authentication
-    #
-    # @param value [String] Staffomatic subdomain
-    def subdomain=(value)
-      reset_agent
-      @subdomain = value
     end
 
     # Set OAuth access token for authentication

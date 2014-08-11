@@ -16,6 +16,9 @@ module Staffomatic
     # Default media type
     MEDIA_TYPE   = "application/vnd.staffomatic.v3+json"
 
+    # Default API version
+    API_VERSION   = "/v3"
+
     # Default WEB endpoint
     WEB_ENDPOINT = "https://staffomatic.com".freeze
 
@@ -84,16 +87,16 @@ module Staffomatic
         ENV['STAFFOMATIC_DEFAULT_MEDIA_TYPE'] || MEDIA_TYPE
       end
 
-      # Default Staffomatic email for Basic Auth from ENV
+      # Default API version from ENV or {API_VERSION}
       # @return [String]
-      def email
-        ENV['STAFFOMATIC_EMAIL']
+      def default_api_version
+        ENV['STAFFOMATIC_DEFAULT_API_VERSION'] || API_VERSION
       end
 
       # Default Staffomatic email for Basic Auth from ENV
       # @return [String]
-      def subdomain
-        ENV['STAFFOMATIC_SUBDOMAIN']
+      def email
+        ENV['STAFFOMATIC_EMAIL']
       end
 
       # Default middleware stack for Faraday::Connection

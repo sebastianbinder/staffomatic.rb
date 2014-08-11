@@ -81,7 +81,7 @@ module Staffomatic
       def scopes(token = @access_token)
         raise ArgumentError.new("Access token required") if token.nil?
 
-        agent.call(:get, "user", :headers => {"Authorization" => "token #{token}" }).
+        agent.call(:get, "user", :headers => {"Authorization" => "access_token #{token}" }).
           headers['X-OAuth-Scopes'].
           to_s.
           split(',').

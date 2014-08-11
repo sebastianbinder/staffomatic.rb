@@ -11,15 +11,15 @@ describe Staffomatic::User do
 
     context "with login" do
       it "returns login api path" do
-        path = Staffomatic::User.path 'pengwynn'
-        expect(path).to eq 'users/pengwynn'
+        path = Staffomatic::User.path 493
+        expect(path).to eq 'users/493'
       end
     end # with login
 
     context "with id" do
       it "returns id api path" do
         path = Staffomatic::User.path 865
-        expect(path).to eq 'user/865'
+        expect(path).to eq 'users/865'
       end
     end # with id
   end # .path

@@ -29,7 +29,7 @@ module Staffomatic
       # @see https://developer.github.com/v3/users/#get-a-single-user
       # @see https://developer.github.com/v3/users/#get-the-authenticated-user
       # @example
-      #   Staffomatic.user("sferik")
+      #   Staffomatic.user(493)
       def user(user=nil, options = {})
         get User.path(user), options
       end
@@ -56,12 +56,11 @@ module Staffomatic
         post "#{web_endpoint}login/oauth/access_token", options
       end
 
-      # Validate user email password and subdomain
+      # Validate user email and password
       #
       # @param options [Hash] User credentials
       # @option options [String] :email Staffomatic email
       # @option options [String] :password Staffomatic password
-      # @option options [String] :subdomain Staffomatic subdomain
       # @return [Boolean] True if credentials are valid
       def validate_credentials(options = {})
         !self.class.new(options).user.nil?

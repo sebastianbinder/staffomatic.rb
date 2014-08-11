@@ -39,17 +39,16 @@ describe Staffomatic::Client do
         @opts = {
           :connection_options => {:ssl => {:verify => false}},
           :per_page => 40,
-          :email    => "kalle@easypep.de",
-          :password => "welcome",
-          :account  => "demo"
+          :email    => "admin@demo.de",
+          :password => "welcome"
         }
       end
 
       it "overrides module configuration" do
         client = Staffomatic::Client.new(@opts)
         expect(client.per_page).to eq(40)
-        expect(client.login).to eq("defunkt")
-        expect(client.instance_variable_get(:"@password")).to eq("il0veruby")
+        expect(client.email).to eq("admin@demo.de")
+        expect(client.instance_variable_get(:"@password")).to eq("welcome")
         expect(client.auto_paginate).to eq(Staffomatic.auto_paginate)
         expect(client.client_id).to eq(Staffomatic.client_id)
       end
@@ -62,8 +61,8 @@ describe Staffomatic::Client do
           end
         end
         expect(client.per_page).to eq(40)
-        expect(client.login).to eq("defunkt")
-        expect(client.instance_variable_get(:"@password")).to eq("il0veruby")
+        expect(client.email).to eq("admin@demo.de")
+        expect(client.instance_variable_get(:"@password")).to eq("welcome")
         expect(client.auto_paginate).to eq(Staffomatic.auto_paginate)
         expect(client.client_id).to eq(Staffomatic.client_id)
       end
@@ -71,7 +70,7 @@ describe Staffomatic::Client do
       it "masks passwords on inspect" do
         client = Staffomatic::Client.new(@opts)
         inspected = client.inspect
-        expect(inspected).not_to include("il0veruby")
+        expect(inspected).not_to include("welcome")
       end
 
       it "masks tokens on inspect" do
@@ -101,14 +100,14 @@ describe Staffomatic::Client do
       end
       it "sets basic auth creds with .configure" do
         Staffomatic.configure do |config|
-          config.email = 'kalle@easypep.de'
+          config.email = 'admin@demo.de'
           config.password = 'welcome'
         end
         expect(Staffomatic.client).to be_basic_authenticated
       end
       it "sets basic auth creds with module methods" do
-        Staffomatic.login = 'pengwynn'
-        Staffomatic.password = 'il0veruby'
+        Staffomatic.email = 'admin@demo.de'
+        Staffomatic.password = 'welcome'
         expect(Staffomatic.client).to be_basic_authenticated
       end
       it "sets oauth token with .configure" do
@@ -144,14 +143,14 @@ describe Staffomatic::Client do
     describe "with class level config" do
       it "sets basic auth creds with .configure" do
         @client.configure do |config|
-          config.email = 'kalle@easypep.de'
+          config.email = 'admin@demo.de'
           config.password = 'welcome'
         end
         expect(@client).to be_basic_authenticated
       end
       it "sets basic auth creds with instance methods" do
-        @client.login = 'pengwynn'
-        @client.password = 'il0veruby'
+        @client.email = 'admin@demo.de'
+        @client.password = 'welcome'
         expect(@client).to be_basic_authenticated
       end
       it "sets oauth token with .configure" do
@@ -185,12 +184,12 @@ describe Staffomatic::Client do
     describe "when basic authenticated"  do
       it "makes authenticated calls" do
         Staffomatic.configure do |config|
-          config.email = 'kalle@easypep.de'
+          config.email = 'admin@demo.de'
           config.password = 'welcome'
+          config.api_endpoint = test_staffomatic_api_endpoint
         end
-
-        root_request = stub_get("admin@demo.de:welcome@demo.staffomatic.com/api/")
-        Staffomatic.client.get("/")
+        root_request = stub_get("http://admin%40demo.de:welcome@demo.staffomatic-api.dev/api")
+        Staffomatic.client.get("/api")
         assert_requested root_request
       end
     end
@@ -199,27 +198,16 @@ describe Staffomatic::Client do
       it "makes authenticated calls" do
         client = oauth_client
 
-        root_request = stub_get("/").
-          with(:headers => {:authorization => "token #{test_staffomatic_token}"})
-        client.get("/")
+        root_request = stub_get("http://demo.staffomatic-api.dev/api").
+          with(:headers => {:authorization => "Bearer #{test_staffomatic_token}"})
+        client.get("/api")
         assert_requested root_request
       end
       it "fetches and memoizes login" do
         client = oauth_client
 
-        expect(client.login).to eq(test_staffomatic_email)
+        expect(client.email).to eq(test_staffomatic_email)
         assert_requested :get, staffomatic_url('/user')
-      end
-    end
-    describe "when application authenticated" do
-      it "makes authenticated calls" do
-        client = Staffomatic.client
-        client.client_id     = '97b4937b385eb63d1f46'
-        client.client_secret = 'd255197b4937b385eb63d1f4677e3ffee61fbaea'
-
-        root_request = stub_get("/?client_id=97b4937b385eb63d1f46&client_secret=d255197b4937b385eb63d1f4677e3ffee61fbaea")
-        client.get("/")
-        assert_requested root_request
       end
     end
   end
@@ -242,17 +230,8 @@ describe Staffomatic::Client do
       Staffomatic.reset!
       VCR.use_cassette 'root' do
         root = Staffomatic.client.root
-        expect(root.rels[:issues].href).to eq("https://api.staffomatic.com/issues")
+        expect(root[:current_user_url]).to eq("#{test_staffomatic_api_endpoint}/user")
       end
-    end
-
-    it "passes app creds in the query string" do
-      root_request = stub_get("/?client_id=97b4937b385eb63d1f46&client_secret=d255197b4937b385eb63d1f4677e3ffee61fbaea")
-      client = Staffomatic.client
-      client.client_id     = '97b4937b385eb63d1f46'
-      client.client_secret = 'd255197b4937b385eb63d1f4677e3ffee61fbaea'
-      client.root
-      assert_requested root_request
     end
   end
 
@@ -261,7 +240,7 @@ describe Staffomatic::Client do
       Staffomatic.reset!
       client = Staffomatic.client
       expect(client.last_response).to be_nil
-      client.get "/"
+      client.get "/api"
       expect(client.last_response.status).to eq(200)
     end
   end # .last_response
@@ -269,15 +248,16 @@ describe Staffomatic::Client do
   describe ".get", :vcr do
     before(:each) do
       Staffomatic.reset!
+      Staffomatic.api_endpoint = test_staffomatic_api_endpoint
     end
     it "handles query params" do
-      Staffomatic.get "/", :foo => "bar"
-      assert_requested :get, "https://api.staffomatic.com?foo=bar"
+      Staffomatic.get "/api", :foo => "bar"
+      assert_requested :get, "http://demo.staffomatic-api.dev/api?foo=bar"
     end
     it "handles headers" do
       request = stub_get("/zen").
         with(:query => {:foo => "bar"}, :headers => {:accept => "text/plain"})
-      Staffomatic.get "/zen", :foo => "bar", :accept => "text/plain"
+      Staffomatic.get "zen", :foo => "bar", :accept => "text/plain"
       assert_requested request
     end
   end # .get
@@ -285,14 +265,14 @@ describe Staffomatic::Client do
   describe ".head", :vcr do
     it "handles query params" do
       Staffomatic.reset!
-      Staffomatic.head "/", :foo => "bar"
-      assert_requested :head, "https://api.staffomatic.com?foo=bar"
+      Staffomatic.head "/api", :foo => "bar"
+      assert_requested :head, "http://demo.staffomatic-api.dev/api?foo=bar"
     end
     it "handles headers" do
       Staffomatic.reset!
       request = stub_head("/zen").
         with(:query => {:foo => "bar"}, :headers => {:accept => "text/plain"})
-      Staffomatic.head "/zen", :foo => "bar", :accept => "text/plain"
+      Staffomatic.head "zen", :foo => "bar", :accept => "text/plain"
       assert_requested request
     end
   end # .head
@@ -304,33 +284,33 @@ describe Staffomatic::Client do
     end
     it "Accepts application/vnd.staffomatic.v3+json by default" do
       VCR.use_cassette 'root' do
-        root_request = stub_get("/").
+        root_request = stub_get("http://demo.staffomatic-api.dev/api").
           with(:headers => {:accept => "application/vnd.staffomatic.v3+json"})
-        @client.get "/"
+        @client.get "/api"
         assert_requested root_request
         expect(@client.last_response.status).to eq(200)
       end
     end
     it "allows Accept'ing another media type" do
-      root_request = stub_get("/").
+      root_request = stub_get("http://demo.staffomatic-api.dev/api").
         with(:headers => {:accept => "application/vnd.staffomatic.beta.diff+json"})
-      @client.get "/", :accept => "application/vnd.staffomatic.beta.diff+json"
+      @client.get "/api", :accept => "application/vnd.staffomatic.beta.diff+json"
       assert_requested root_request
       expect(@client.last_response.status).to eq(200)
     end
     it "sets a default user agent" do
-      root_request = stub_get("/").
+      root_request = stub_get("http://demo.staffomatic-api.dev/api").
         with(:headers => {:user_agent => Staffomatic::Default.user_agent})
-      @client.get "/"
+      @client.get "/api"
       assert_requested root_request
       expect(@client.last_response.status).to eq(200)
     end
     it "sets a custom user agent" do
       user_agent = "Mozilla/5.0 I am Spartacus!"
-      root_request = stub_get("/").
+      root_request = stub_get("http://demo.staffomatic-api.dev/api").
         with(:headers => {:user_agent => user_agent})
       client = Staffomatic::Client.new(:user_agent => user_agent)
-      client.get "/"
+      client.get "/api"
       assert_requested root_request
       expect(client.last_response.status).to eq(200)
     end
@@ -343,11 +323,11 @@ describe Staffomatic::Client do
     end
     it "passes along request headers for POST" do
       headers = {"X-Staffomatic-Foo" => "bar"}
-      root_request = stub_post("/").
+      root_request = stub_post("http://demo.staffomatic-api.dev/api").
         with(:headers => headers).
         to_return(:status => 201)
       client = Staffomatic::Client.new
-      client.post "/", :headers => headers
+      client.post "/api", :headers => headers
       assert_requested root_request
       expect(client.last_response.status).to eq(201)
     end
@@ -355,28 +335,28 @@ describe Staffomatic::Client do
       client = Staffomatic::Client.new
       client.client_id     = key = '97b4937b385eb63d1f46'
       client.client_secret = secret = 'd255197b4937b385eb63d1f4677e3ffee61fbaea'
-      root_request = stub_get "/?client_id=#{key}&client_secret=#{secret}"
+      root_request = stub_get "http://demo.staffomatic-api.dev/api?client_id=#{key}&client_secret=#{secret}"
 
-      client.get("/")
+      client.get("/api")
       assert_requested root_request
     end
     it "omits app creds in query params for basic requests" do
-      client = Staffomatic::Client.new :login => "login", :password => "passw0rd"
+      client = Staffomatic::Client.new :email => "admin@demo.de", :password => "passw0rd"
       client.client_id     = key = '97b4937b385eb63d1f46'
       client.client_secret = secret = 'd255197b4937b385eb63d1f4677e3ffee61fbaea'
-      root_request = stub_get basic_staffomatic_url("/?foo=bar", :login => "login", :password => "passw0rd")
+      root_request = stub_get basic_staffomatic_url("/zen?foo=bar", :login => "login", :password => "passw0rd")
 
-      client.get("/", :foo => "bar")
+      client.get("/api/v3/zen", :foo => "bar")
       assert_requested root_request
     end
     it "omits app creds in query params for token requests" do
       client = Staffomatic::Client.new(:access_token => '87614b09dd141c22800f96f11737ade5226d7ba8')
       client.client_id     = key = '97b4937b385eb63d1f46'
       client.client_secret = secret = 'd255197b4937b385eb63d1f4677e3ffee61fbaea'
-      root_request = stub_get(staffomatic_url("/?foo=bar")).with \
-        :headers => {"Authorization" => "token 87614b09dd141c22800f96f11737ade5226d7ba8"}
+      root_request = stub_get(staffomatic_url("http://demo.staffomatic-api.dev/api?foo=bar")).with \
+        :headers => {"Authorization" => "Bearer 87614b09dd141c22800f96f11737ade5226d7ba8"}
 
-      client.get("/", :foo => "bar")
+      client.get("/api", :foo => "bar")
       assert_requested root_request
     end
   end
@@ -387,6 +367,7 @@ describe Staffomatic::Client do
       Staffomatic.configure do |config|
         config.auto_paginate = true
         config.per_page = 1
+        config.access_token = test_staffomatic_token
       end
     end
 
@@ -395,86 +376,24 @@ describe Staffomatic::Client do
     end
 
     it "fetches all the pages" do
-      url = '/search/users?q=user:joeyw user:pengwynn user:sferik'
+      url = '/api/v3/users'
       Staffomatic.client.paginate url
-      assert_requested :get, staffomatic_url("#{url}&per_page=1")
+      assert_requested :get, staffomatic_url("#{url}?per_page=1")
       (2..3).each do |i|
-        assert_requested :get, staffomatic_url("#{url}&per_page=1&page=#{i}")
+        assert_requested :get, staffomatic_url("#{url}?per_page=1&page=#{i}")
       end
     end
 
+    # we should now
     it "accepts a block for custom result concatination" do
-      results = Staffomatic.client.paginate("/search/users?per_page=1&q=user:pengwynn+user:defunkt",
-        :per_page => 1) { |data, last_response|
-        data.items.concat last_response.data.items
-      }
-
-      expect(results.total_count).to eq(2)
-      expect(results.items.length).to eq(2)
-    end
-  end
-
-  describe ".as_app" do
-    before do
-      @client_id = '97b4937b385eb63d1f46'
-      @client_secret = 'd255197b4937b385eb63d1f4677e3ffee61fbaea'
-
-      Staffomatic.reset!
-      Staffomatic.configure do |config|
-        config.access_token  = 'a' * 40
-        config.client_id     = @client_id
-        config.client_secret = @client_secret
-        config.per_page      = 50
+      pending("not implemented yet.")
+      results = Staffomatic.client.paginate("/api/v3/users?per_page=1",
+        :per_page => 1) do |data, last_response|
+        data.total = last_response.headers['total']
       end
 
-      @root_request = stub_get basic_staffomatic_url "/",
-        :login => @client_id, :password => @client_secret
-    end
-
-    it "uses preconfigured client and secret" do
-      client = Staffomatic.client
-      login = client.as_app do |c|
-        c.login
-      end
-      expect(login).to eq(@client_id)
-    end
-
-    it "requires a client and secret" do
-      Staffomatic.reset!
-      client = Staffomatic.client
-      expect {
-        client.as_app do |c|
-          c.get
-        end
-      }.to raise_error Staffomatic::ApplicationCredentialsRequired
-    end
-
-    it "duplicates the client" do
-      client = Staffomatic.client
-      page_size = client.as_app do |c|
-        c.per_page
-      end
-      expect(page_size).to eq(client.per_page)
-    end
-
-    it "uses client and secret as Basic auth" do
-      client = Staffomatic.client
-      app_client = client.as_app do |c|
-        c
-      end
-      expect(app_client).to be_basic_authenticated
-    end
-
-    it "makes authenticated requests" do
-      stub_get staffomatic_url("/user")
-
-      client = Staffomatic.client
-      client.get "/user"
-      client.as_app do |c|
-        c.get "/"
-      end
-
-      assert_requested @root_request
+      expect(results.total).to eq(2)
+      expect(results.length).to eq(2)
     end
   end
 
@@ -490,16 +409,16 @@ describe Staffomatic::Client do
 
     it "raises on 404" do
       stub_get('/booya').to_return(:status => 404)
-      expect { Staffomatic.get('/booya') }.to raise_error Staffomatic::NotFound
+      expect { Staffomatic.get('/api/v3/booya') }.to raise_error Staffomatic::NotFound
     end
 
     it "raises on 500" do
-      stub_get('/boom').to_return(:status => 500)
-      expect { Staffomatic.get('/boom') }.to raise_error Staffomatic::InternalServerError
+      stub_get('/api/v3/boom').to_return(:status => 500)
+      expect { Staffomatic.get('/api/v3/boom') }.to raise_error Staffomatic::InternalServerError
     end
 
     it "includes a message" do
-      stub_get('/boom').
+      stub_get('/api/v3/boom').
         to_return \
         :status => 422,
         :headers => {
@@ -507,9 +426,9 @@ describe Staffomatic::Client do
         },
         :body => {:message => "No repository found for hubtopic"}.to_json
       begin
-        Staffomatic.get('/boom')
+        Staffomatic.get('/api/v3/boom')
       rescue Staffomatic::UnprocessableEntity => e
-        expect(e.message).to include("GET https://api.staffomatic.com/boom: 422 - No repository found")
+        expect(e.message).to include("GET #{staffomatic_url('/api/v3/boom')}: 422 - No repository found")
       end
     end
 
@@ -522,14 +441,14 @@ describe Staffomatic::Client do
         },
         :body => {:error => "No repository found for hubtopic"}.to_json
       begin
-        Staffomatic.get('/boom')
+        Staffomatic.get('/api/v3/boom')
       rescue Staffomatic::UnprocessableEntity => e
-        expect(e.message).to include("GET https://api.staffomatic.com/boom: 422 - Error: No repository found")
+        expect(e.message).to include("GET #{staffomatic_url('/api/v3/boom')}: 422 - Error: No repository found")
       end
     end
 
     it "includes an error summary" do
-      stub_get('/boom').
+      stub_get('/api/v3/boom').
         to_return \
         :status => 422,
         :headers => {
@@ -544,9 +463,9 @@ describe Staffomatic::Client do
           ]
         }.to_json
       begin
-        Staffomatic.get('/boom')
+        Staffomatic.get('/api/v3/boom')
       rescue Staffomatic::UnprocessableEntity => e
-        expect(e.message).to include("GET https://api.staffomatic.com/boom: 422 - Validation Failed")
+        expect(e.message).to include("GET #{staffomatic_url('/api/v3/boom')}: 422 - Validation Failed")
         expect(e.message).to include("  resource: Issue")
         expect(e.message).to include("  field: title")
         expect(e.message).to include("  code: missing_field")
@@ -554,7 +473,7 @@ describe Staffomatic::Client do
     end
 
     it "exposes errors array" do
-      stub_get('/boom').
+      stub_get('/api/v3/boom').
         to_return \
         :status => 422,
         :headers => {
@@ -569,7 +488,7 @@ describe Staffomatic::Client do
           ]
         }.to_json
       begin
-        Staffomatic.get('/boom')
+        Staffomatic.get('/api/v3/boom')
       rescue Staffomatic::UnprocessableEntity => e
         expect(e.errors.first[:resource]).to eq("Issue")
         expect(e.errors.first[:field]).to eq("title")
@@ -578,48 +497,49 @@ describe Staffomatic::Client do
     end
 
     it "knows the difference between Forbidden and rate limiting" do
+      pending("rate limit not yet implemented")
       stub_get('/some/admin/stuffs').to_return(:status => 403)
       expect { Staffomatic.get('/some/admin/stuffs') }.to raise_error Staffomatic::Forbidden
 
-      stub_get('/users/mojomobo').to_return \
+      stub_get('/api/v3/users/mojomobo').to_return \
         :status => 403,
         :headers => {
           :content_type => "application/json",
         },
         :body => {:message => "API rate limit exceeded"}.to_json
-      expect { Staffomatic.get('/users/mojomobo') }.to raise_error Staffomatic::TooManyRequests
+      expect { Staffomatic.get('/api/v3/users/mojomobo') }.to raise_error Staffomatic::TooManyRequests
 
-      stub_get('/user').to_return \
+      stub_get('/api/v3/user').to_return \
         :status => 403,
         :headers => {
           :content_type => "application/json",
         },
         :body => {:message => "Maximum number of login attempts exceeded"}.to_json
-      expect { Staffomatic.get('/user') }.to raise_error Staffomatic::TooManyLoginAttempts
+      expect { Staffomatic.get('/api/v3/user') }.to raise_error Staffomatic::TooManyLoginAttempts
     end
 
     it "raises on unknown client errors" do
-      stub_get('/user').to_return \
+      stub_get('/api/v3/user').to_return \
         :status => 418,
         :headers => {
           :content_type => "application/json",
         },
         :body => {:message => "I'm a teapot"}.to_json
-      expect { Staffomatic.get('/user') }.to raise_error Staffomatic::ClientError
+      expect { Staffomatic.get('/api/v3/user') }.to raise_error Staffomatic::ClientError
     end
 
     it "raises on unknown server errors" do
-      stub_get('/user').to_return \
+      stub_get('/api/v3/user').to_return \
         :status => 509,
         :headers => {
           :content_type => "application/json",
         },
         :body => {:message => "Bandwidth exceeded"}.to_json
-      expect { Staffomatic.get('/user') }.to raise_error Staffomatic::ServerError
+      expect { Staffomatic.get('/api/v3/user') }.to raise_error Staffomatic::ServerError
     end
 
     it "handles documentation URLs in error messages" do
-      stub_get('/user').to_return \
+      stub_get('/api/v3/user').to_return \
         :status => 415,
         :headers => {
           :content_type => "application/json",
@@ -629,7 +549,7 @@ describe Staffomatic::Client do
           :documentation_url => "http://developer.github.com/v3"
         }.to_json
       begin
-        Staffomatic.get('/user')
+        Staffomatic.get('/api/v3/user')
       rescue Staffomatic::UnsupportedMediaType => e
         msg = "415 - Unsupported Media Type"
         expect(e.message).to include(msg)
@@ -638,44 +558,19 @@ describe Staffomatic::Client do
     end
 
     it "handles an error response with an array body" do
-      stub_get('/user').to_return \
+      stub_get('/api/v3/user').to_return \
         :status => 500,
         :headers => {
           :content_type => "application/json"
         },
         :body => [].to_json
-      expect { Staffomatic.get('/user') }.to raise_error Staffomatic::ServerError
+      expect { Staffomatic.get('/api/v3/user') }.to raise_error Staffomatic::ServerError
     end
   end
 
-  it "knows the difference between unauthorized and needs OTP" do
-      stub_get('/authorizations').to_return(:status => 401)
-      expect { Staffomatic.get('/authorizations') }.to raise_error Staffomatic::Unauthorized
-
-      stub_get('/authorizations/1').to_return \
-        :status => 401,
-        :headers => {
-          :content_type => "application/json",
-          "X-Staffomatic-OTP" => "required; sms"
-        },
-        :body => {:message => "Must specify two-factor authentication OTP code."}.to_json
-      expect { Staffomatic.get('/authorizations/1') }.to raise_error Staffomatic::OneTimePasswordRequired
-  end
-
-  it "knows the password delivery mechanism when needs OTP" do
-    stub_get('/authorizations/1').to_return \
-      :status => 401,
-      :headers => {
-        :content_type => "application/json",
-        "X-Staffomatic-OTP" => "required; app"
-      },
-      :body => {:message => "Must specify two-factor authentication OTP code."}.to_json
-
-    begin
-      Staffomatic.get('/authorizations/1')
-    rescue Staffomatic::OneTimePasswordRequired => otp_error
-      expect(otp_error.password_delivery).to eql 'app'
-    end
+  it "knows when to raise Unauthorized error" do
+    stub_get('/api/v3/users').to_return(:status => 401)
+    expect { Staffomatic.get('/api/v3/users') }.to raise_error Staffomatic::Unauthorized
   end
 
 end

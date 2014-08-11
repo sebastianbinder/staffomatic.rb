@@ -8,7 +8,7 @@ module Staffomatic
     def self.path user
       case user
       when Integer
-        "user/#{user}"
+        "users/#{user}"
       else
         "user"
       end
