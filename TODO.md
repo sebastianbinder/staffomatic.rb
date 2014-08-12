@@ -12,6 +12,40 @@ Add authentication methods
 
 specifics:
 
+definition:
+
+api_endpoint => returns full url:
+
+    https://demo.staffomatic-api.dev/api/v3/
+
+Configuration should be:
+
+    Staffomatic.configure do |c|
+      c.email = 'admin@demo.de'
+      c.password = 'c0d3b4ssssss!'
+      c.account = 'demo.staffomatic.com'
+    end
+
+or:
+
+    Staffomatic.configure do |c|
+      c.access_token = 'c0d3b4ssssss!'
+      c.account = 'demo.staffomatic.com'
+    end
+
+or:
+
+    client = Staffomatic::Client.new(
+      :access_token => ENV.fetch('STAFFOMATIC_TEST_TOKEN'),
+      :account =>  ENV.fetch('STAFFOMATIC_ACCOUNT')
+    )
+
+or:
+
+    ENV['STAFFOMATIC_TOKEN'] = "sometoken"
+    ENV['STAFFOMATIC_ACCOUNT'] = "demo.staffomatic.com"
+    client = Staffomatic::Client.new
+
 does not result in same value:
 
     * Staffomatic.api_endpoint
@@ -21,6 +55,7 @@ does not result in same value:
 wheneevr STAFFOMATIC_API_ENDPOINT is set.
 
 * change `login` aka `username` to `email`
+
 
     export STAFFOMATIC_TEST_EMAIL='admin@demo.de'
     export STAFFOMATIC_TEST_PASSWORD="welcome"
@@ -85,8 +120,6 @@ Helpers:
 * Do not allow creating `create_authorization` from `Two-Factor Authentication`
 
       client.create_authorization(:scopes => ["user"], :note => "Name of token")
-
-* what is `web_endpoint`? removeit!
 
 * `Hypermedia in Staffomatic` nice feature. what todo woth it?
 

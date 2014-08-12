@@ -196,8 +196,8 @@ module Staffomatic
         if app_id.to_s.empty?
           raise Staffomatic::ApplicationCredentialsRequired.new "client_id required"
         end
-        authorize_url = options.delete(:endpoint) || Staffomatic.web_endpoint
-        authorize_url += "login/oauth/authorize?client_id=" + app_id
+        authorize_url = options.delete(:api_endpoint) || Staffomatic.api_endpoint
+        authorize_url += "oauth/authorize?client_id=" + app_id
 
         options.each do |key, value|
           authorize_url += "&" + key.to_s + "=" + value

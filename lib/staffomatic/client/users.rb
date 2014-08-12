@@ -53,7 +53,7 @@ module Staffomatic
             :accept       => 'application/json'
           }
         })
-        post "#{web_endpoint}login/oauth/access_token", options
+        post "#{api_endpoint}oauth/access_token", options
       end
 
       # Validate user email and password

@@ -6,8 +6,10 @@ module Staffomatic
     # @!attribute [w] access_token
     #   @see https://developer.github.com/v3/oauth/
     #   @return [String] OAuth2 access token for authentication
+    # @!attribute account
+    #   @return [String] Account URL for API requests.
     # @!attribute api_endpoint
-    #   @return [String] Base URL for API requests. default: https://api.staffomatic.com/
+    #   @return [String] Base URL for API requests.
     # @!attribute auto_paginate
     #   @return [Boolean] Auto fetch next page of results until rate limit reached
     # @!attribute client_id
@@ -19,9 +21,6 @@ module Staffomatic
     # @!attribute default_media_type
     #   @see https://developer.github.com/v3/media/
     #   @return [String] Configure preferred media type (for API versioning, for example)
-    # @!attribute default_api_version
-    #   @see https://developer.github.com/v3/api_version/
-    #   @return [String] Configure preferred api version (for API versioning, for example)
     # @!attribute connection_options
     #   @see https://staffomatic.com/lostisland/faraday
     #   @return [Hash] Configure connection options for Faraday
@@ -39,13 +38,11 @@ module Staffomatic
     #   @return [String] URI for proxy server
     # @!attribute user_agent
     #   @return [String] Configure User-Agent header for requests.
-    # @!attribute web_endpoint
-    #   @return [String] Base URL for web URLs. default: https://staffomatic.com/
 
     attr_accessor :access_token, :auto_paginate, :client_id,
-                  :client_secret, :default_media_type, :default_api_version, :connection_options,
+                  :client_secret, :default_media_type, :connection_options,
                   :middleware, :per_page, :proxy, :user_agent
-    attr_writer :password, :web_endpoint, :api_endpoint, :email
+    attr_writer :password, :api_endpoint, :email, :account, :scheme
 
     class << self
 
@@ -54,6 +51,7 @@ module Staffomatic
       def keys
         @keys ||= [
           :access_token,
+          :account,
           :api_endpoint,
           :auto_paginate,
           :client_id,
@@ -65,8 +63,8 @@ module Staffomatic
           :per_page,
           :password,
           :proxy,
-          :user_agent,
-          :web_endpoint
+          :scheme,
+          :user_agent
         ]
       end
     end
@@ -89,11 +87,12 @@ module Staffomatic
       File.join(@api_endpoint, "")
     end
 
-    # Base URL for generated web URLs
-    #
-    # @return [String] Default: https://staffomatic.com/
-    def web_endpoint
-      File.join(@web_endpoint, "")
+    def scheme
+      @scheme
+    end
+
+    def account
+      @account
     end
 
     # Memoizes the user.email by fetching user once (see users.rb)

@@ -204,6 +204,29 @@ module Staffomatic
       yield app_client if block_given?
     end
 
+    # Set account for authentication
+    #
+    # @param value [String] Staffomatic account
+    def account=(value)
+      reset_agent
+      @account = value
+    end
+
+    # Build api_enpoint from options or defaults
+    #
+    # @return [String] Base URL for API requests.
+    def api_endpoint
+      "#{@scheme}://#{@account}/api/v3"
+    end
+
+    # Set value to build api_enpoint
+    #
+    # @param value [String] Staffomatic scheme
+    def scheme=(value)
+      reset_agent
+      @scheme = value
+    end
+
     # Set email for authentication
     #
     # @param value [String] Staffomatic email

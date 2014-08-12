@@ -7,20 +7,14 @@ module Staffomatic
   # Default configuration options for {Client}
   module Default
 
-    # Default API endpoint
-    API_ENDPOINT = "https://staffomatic.com".freeze
+    # Default API SCHEME
+    SCHEME = "https".freeze
 
     # Default User Agent header string
     USER_AGENT   = "Staffomatic Ruby Gem #{Staffomatic::VERSION}".freeze
 
     # Default media type
     MEDIA_TYPE   = "application/vnd.staffomatic.v3+json"
-
-    # Default API version
-    API_VERSION   = "/v3"
-
-    # Default WEB endpoint
-    WEB_ENDPOINT = "https://staffomatic.com".freeze
 
     # In Faraday 0.9, Faraday::Builder was renamed to Faraday::RackBuilder
     RACK_BUILDER_CLASS = defined?(Faraday::RackBuilder) ? Faraday::RackBuilder : Faraday::Builder
@@ -46,10 +40,22 @@ module Staffomatic
         ENV['STAFFOMATIC_ACCESS_TOKEN']
       end
 
-      # Default API endpoint from ENV or {API_ENDPOINT}
+      # Default url scheme from ENV or {SCHEME}
+      # @return [String]
+      def scheme
+        ENV['STAFFOMATIC_SCHEME'] || SCHEME
+      end
+
+      # Default API endpoint from ENV or build from ENV
       # @return [String]
       def api_endpoint
-        ENV['STAFFOMATIC_API_ENDPOINT'] || API_ENDPOINT
+        ENV['API_ENDPOINT'] || "#{self.scheme}://#{ENV['STAFFOMATIC_ACCOUNT']}/api/v3"
+      end
+
+      # Default account from ENV
+      # @return [String]
+      def account
+        ENV['STAFFOMATIC_ACCOUNT']
       end
 
       # Default pagination preference from ENV
@@ -85,12 +91,6 @@ module Staffomatic
       # @return [String]
       def default_media_type
         ENV['STAFFOMATIC_DEFAULT_MEDIA_TYPE'] || MEDIA_TYPE
-      end
-
-      # Default API version from ENV or {API_VERSION}
-      # @return [String]
-      def default_api_version
-        ENV['STAFFOMATIC_DEFAULT_API_VERSION'] || API_VERSION
       end
 
       # Default Staffomatic email for Basic Auth from ENV
@@ -130,12 +130,6 @@ module Staffomatic
       # @return [String]
       def user_agent
         ENV['STAFFOMATIC_USER_AGENT'] || USER_AGENT
-      end
-
-      # Default web endpoint from ENV or {WEB_ENDPOINT}
-      # @return [String]
-      def web_endpoint
-        ENV['STAFFOMATIC_WEB_ENDPOINT'] || WEB_ENDPOINT
       end
 
     end
