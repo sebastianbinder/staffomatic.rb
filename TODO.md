@@ -12,8 +12,15 @@ Add authentication methods
 
 specifics:
 
+does not result in same value:
+
+    * Staffomatic.api_endpoint
+    * Staffomatic.client.api_endpoint
+    * Staffomatic::Default.api_endpoint
+
+wheneevr STAFFOMATIC_API_ENDPOINT is set.
+
 * change `login` aka `username` to `email`
-* remove `subdomain`
 
     export STAFFOMATIC_TEST_EMAIL='admin@demo.de'
     export STAFFOMATIC_TEST_PASSWORD="welcome"

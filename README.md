@@ -2,21 +2,16 @@
 
 Ruby toolkit for the Staffomatic API.
 
+#### *NOT PRODUCTION READY YET!*
+
 ## Philosophy
 
 API wrappers [should reflect the idioms of the language in which they were
 written][wrappers]. Staffomatic.rb wraps the [Staffomatic API][staffomatic-api] in a flat API
 client that follows Ruby conventions and requires little knowledge of REST.
-Most methods have positional arguments for required input and an options hash
-for optional parameters, headers, or other options:
-
-```ruby
-# Fetch a README with Accept header for HTML format
-Staffomatic.readme 'al3x/sovereign', :accept => 'application/vnd.staffomatic.html'
-```
 
 [wrappers]: http://wynnnetherland.com/journal/what-makes-a-good-api-wrapper
-[staffomatic-api]: http://developer.github.com
+[staffomatic-api]: http://staffomatic.com
 
 ## Quick start
 
@@ -36,8 +31,9 @@ configuration) or as client instance methods.
 ```ruby
 # Provide authentication credentials
 Staffomatic.configure do |c|
-  c.login = 'defunkt'
+  c.email = 'admin@demo.de'
   c.password = 'c0d3b4ssssss!'
+  c.api_endpoint = 'http://demo.staffomatic.com'
 end
 
 # Fetch the current user
@@ -47,7 +43,7 @@ or
 
 ```ruby
 # Provide authentication credentials
-client = Staffomatic::Client.new(:login => 'defunkt', :password => 'c0d3b4ssssss!')
+client = Staffomatic::Client.new(:email => 'admin@demo.de', :password => 'c0d3b4ssssss!', :api_endpoint => 'http://demo.staffomatic.com')
 # Fetch the current user
 client.user
 ```
@@ -59,15 +55,13 @@ access for fields returned in the API response.
 
 ```ruby
 # Fetch a user
-user = Staffomatic.user 'jbarnette'
-puts user.name
-# => "John Barnette"
+user = Staffomatic.user '493'
+puts user.email
+# => "admin@demo.de"
 puts user.fields
 # => <Set: {:login, :id, :gravatar_id, :type, :name, :company, :blog, :location, :email, :hireable, :bio, :public_repos, :followers, :following, :created_at, :updated_at, :public_gists}>
 puts user[:company]
 # => "Staffomatic"
-user.rels[:gists].href
-# => "https://api.staffomatic.com/users/jbarnette/gists"
 ```
 
 **Note:** URL fields are culled into a separate `.rels` collection for easier
@@ -80,7 +74,7 @@ need access to the raw HTTP response headers. You can access the last HTTP
 response with `Client#last_response`:
 
 ```ruby
-user      = Staffomatic.user 'andrewpthorp'
+user      = Staffomatic.user '493'
 response  = Staffomatic.last_response
 etag      = response.headers[:etag]
 ```
@@ -97,12 +91,13 @@ making authenticated requests:
 
 ```ruby
 client = Staffomatic::Client.new \
-  :login    => 'defunkt',
-  :password => 'c0d3b4ssssss!'
+  :email    => 'admin@demo.de',
+  :password => 'c0d3b4ssssss!',
+  :api_endpoint => 'http://demo.staffomatic.com'
 
 user = client.user
-user.login
-# => "defunkt"
+user.email
+# => "admin@demo.de"
 ```
 While Basic Authentication allows you to get started quickly, OAuth access
 tokens are the preferred way to authenticate on behalf of users.
@@ -122,44 +117,12 @@ To use an access token with the Staffomatic client, pass your token in the
 `:access_token` options parameter in lieu of your username and password:
 
 ```ruby
-client = Staffomatic::Client.new(:access_token => "<your 40 char token>")
+client = Staffomatic::Client.new(:access_token => "<your 40 char token>", :api_endpoint => 'http://demo.staffomatic.com')
 
 user = client.user
-user.login
-# => "defunkt"
+user.email
+# => "admin@demo.de"
 ```
-
-You can [create access tokens through your Staffomatic Account Settings](https://help.staffomatic.com/articles/creating-an-access-token-for-command-line-use)
-or with a basic authenticated Staffomatic client:
-
-```ruby
-client = Staffomatic::Client.new \
-  :login    => 'defunkt',
-  :password => 'c0d3b4ssssss!'
-
-client.create_authorization(:scopes => ["user"], :note => "Name of token")
-# => <your new oauth token>
-```
-
-### Application authentication
-
-Staffomatic also supports application-only authentication [using OAuth application client
-credentials][app-creds]. Using application credentials will result in making
-anonymous API calls on behalf of an application in order to take advantage of
-the higher rate limit.
-
-```ruby
-client = Staffomatic::Client.new \
-  :client_id     => "<your 20 char id>",
-  :client_secret => "<your 40 char secret>"
-
-user = client.user 'defunkt'
-```
-
-[auth]: http://developer.github.com/v3/#authentication
-[oauth]: http://developer.github.com/v3/oauth/
-[access scopes]: http://developer.github.com/v3/oauth/#scopes
-[app-creds]: http://developer.github.com/v3/#unauthenticated-rate-limited-requests
 
 ## Pagination
 
@@ -169,8 +132,8 @@ previous, and last pages for you in the `Link` response header as [Hypermedia
 link relations](#hypermedia-agent).
 
 ```ruby
-issues = Staffomatic.issues 'rails/rails', :per_page => 100
-issues.concat Staffomatic.last_response.rels[:next].get.data
+users = Staffomatic.all_users :per_page => 100
+users.concat Staffomatic.last_response.rels[:next].get.data
 ```
 
 ### Auto pagination
@@ -181,8 +144,8 @@ from every page into a single array:
 
 ```ruby
 Staffomatic.auto_paginate = true
-issues = Staffomatic.issues 'rails/rails'
-issues.length
+users = Staffomatic.all_users
+users.length
 
 # => 702
 ```
@@ -190,8 +153,6 @@ issues.length
 **Note:** While Staffomatic auto pagination will set the page size to the maximum
 `100`, and seek to not overstep your rate limit, you probably want to use a
 custom pattern for traversing large lists.
-
-[paginated]: http://developer.github.com/v3/#pagination
 
 ## Configuration and defaults
 
@@ -205,16 +166,14 @@ number of client instances based on some shared defaults.
 Every writable attribute in {Staffomatic::Configurable} can be set one at a time:
 
 ```ruby
-Staffomatic.api_endpoint = 'http://api.staffomatic.dev'
-Staffomatic.web_endpoint = 'http://staffomatic.dev'
+Staffomatic.api_endpoint = 'http://demo.staffomatic.com/api/v3'
 ```
 
 or in batch:
 
 ```ruby
 Staffomatic.configure do |c|
-  c.api_endpoint = 'http://api.staffomatic.dev'
-  c.web_endpoint = 'http://staffomatic.dev'
+  c.api_endpoint = 'http://demo.staffomatic.com/api/v3'
 end
 ```
 
@@ -225,10 +184,10 @@ attributes will look for a default value from the ENV before returning
 Staffomatic's default.
 
 ```ruby
-# Given $STAFFOMATIC_API_ENDPOINT is "http://api.staffomatic.dev"
+# Given $STAFFOMATIC_API_ENDPOINT is "http://demo.staffomatic.com/api/v3"
 Staffomatic.api_endpoint
 
-# => "http://api.staffomatic.dev"
+# => "http://demo.staffomatic.com/api/v3"
 ```
 
 Deprecation warnings and API endpoints in development preview warnings are
@@ -239,62 +198,6 @@ printed to STDOUT by default, these can be disabled by setting the ENV
 
 Starting in version 3.0, Staffomatic is [hypermedia][]-enabled. Under the hood,
 {Staffomatic::Client} uses [Sawyer][], a hypermedia client built on [Faraday][].
-
-### Hypermedia in Staffomatic
-
-Resources returned by Staffomatic methods contain not only data but hypermedia
-link relations:
-
-```ruby
-user = Staffomatic.user 'technoweenie'
-
-# Get the repos rel, returned from the API
-# as repos_url in the resource
-user.rels[:repos].href
-# => "https://api.staffomatic.com/users/technoweenie/repos"
-
-repos = user.rels[:repos].get.data
-repos.last.name
-# => "faraday-zeromq"
-```
-
-When processing API responses, all `*_url` attributes are culled in to the link
-relations collection. Any `url` attribute becomes `.rels[:self]`.
-
-### URI templates
-
-You might notice many link relations have variable placeholders. Staffomatic
-supports [URI Templates][uri-templates] for parameterized URI expansion:
-
-```ruby
-repo = Staffomatic.repo 'pengwynn/pingwynn'
-rel = repo.rels[:issues]
-# => #<Sawyer::Relation: issues: get https://api.staffomatic.com/repos/pengwynn/pingwynn/issues{/number}>
-
-# Get a page of issues
-rel.get.data
-
-# Get issue #2
-rel.get(:uri => {:number => 2}).data
-```
-
-### The Full Hypermedia Experience™
-
-If you want to use Staffomatic as a pure hypermedia API client, you can start at
-the API root and follow link relations from there:
-
-```ruby
-root = Staffomatic.root
-root.rels[:repository].get :uri => {:owner => "staffomatic", :repo => "staffomatic.rb" }
-```
-
-Staffomatic 3.0 aims to be hypermedia-driven, removing the internal URL
-construction currently used throughout the client.
-
-[hypermedia]: http://en.wikipedia.org/wiki/Hypermedia
-[Sawyer]: https://staffomatic.com/lostisland/sawyer
-[Faraday]: https://staffomatic.com/lostisland/faraday
-[uri-templates]: http://tools.ietf.org/html/rfc6570
 
 ## Advanced usage
 
@@ -314,23 +217,7 @@ stack = Faraday::RackBuilder.new do |builder|
   builder.adapter Faraday.default_adapter
 end
 Staffomatic.middleware = stack
-Staffomatic.user 'pengwynn'
-```
-```
-I, [2013-08-22T15:54:38.583300 #88227]  INFO -- : get https://api.staffomatic.com/users/pengwynn
-D, [2013-08-22T15:54:38.583401 #88227] DEBUG -- request: Accept: "application/vnd.staffomatic.beta+json"
-User-Agent: "Staffomatic Ruby Gem 2.0.0.rc4"
-I, [2013-08-22T15:54:38.843313 #88227]  INFO -- Status: 200
-D, [2013-08-22T15:54:38.843459 #88227] DEBUG -- response: server: "Staffomatic.com"
-date: "Thu, 22 Aug 2013 20:54:40 GMT"
-content-type: "application/json; charset=utf-8"
-transfer-encoding: "chunked"
-connection: "close"
-status: "200 OK"
-x-ratelimit-limit: "60"
-x-ratelimit-remaining: "39"
-x-ratelimit-reset: "1377205443"
-...
+Staffomatic.user '493'
 ```
 
 See the [Faraday README][faraday] for more middleware magic.
@@ -360,8 +247,8 @@ fingerprint and serve those back up for future `304` responses for the same
 resource. See the [project README][cache] for advanced usage.
 
 
-[cache]: https://staffomatic.com/plataformatec/faraday-http-cache
-[faraday]: https://staffomatic.com/lostisland/faraday
+[cache]: https://github.com/plataformatec/faraday-http-cache
+[faraday]: https://github.com/lostisland/faraday
 
 ## Hacking on Staffomatic.rb
 
