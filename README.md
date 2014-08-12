@@ -1,8 +1,7 @@
 # Staffomatic
 
-Ruby toolkit for the Staffomatic API.
 
-#### *NOT PRODUCTION READY YET!*
+Ruby toolkit for the upcoming Staffomatic API. Not Production ready!
 
 ## Philosophy
 
