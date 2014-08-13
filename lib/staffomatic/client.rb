@@ -216,7 +216,7 @@ module Staffomatic
     #
     # @return [String] Base URL for API requests.
     def api_endpoint
-      "#{@scheme}://#{@account}/api/v3"
+      File.join("#{@scheme}://#{@account}/api/v3", "")
     end
 
     # Set value to build api_enpoint

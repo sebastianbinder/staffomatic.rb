@@ -17,6 +17,8 @@ require 'webmock/rspec'
 WebMock.disable_net_connect!(:allow => 'coveralls.io')
 
 RSpec.configure do |config|
+  config.filter_run focus: true
+  config.run_all_when_everything_filtered = true
   config.raise_errors_for_deprecations!
   config.before(:all) do
     @test_repo = "#{test_staffomatic_email}/#{test_staffomatic_repository}"
@@ -101,6 +103,11 @@ end
 # always with version specification
 def test_staffomatic_api_endpoint
   ENV.fetch 'STAFFOMATIC_TEST_API_ENDPOINT', 'http://demo.staffomatic-api.dev/api/v3'
+end
+
+# always with version specification
+def test_staffomatic_account
+  ENV.fetch 'STAFFOMATIC_TEST_ACCOUNT', 'demo.staffomatic-api.dev'
 end
 
 def test_staffomatic_token
@@ -197,7 +204,7 @@ end
 def oauth_client
   Staffomatic::Client.new(
     :access_token => test_staffomatic_token,
-    :api_endpoint => test_staffomatic_api_endpoint
+    :account => test_staffomatic_account
   )
 end
 

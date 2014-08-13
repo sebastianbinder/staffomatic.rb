@@ -43,7 +43,7 @@ describe Staffomatic::Client::Users do
     context "with application authenticated client" do
       it "returns the access_token" do
         client = Staffomatic::Client.new({client_id: '123', client_secret: '345'})
-        request = stub_post("https://staffomatic.com/login/oauth/access_token?client_id=123&client_secret=345").
+        request = stub_post("#{test_staffomatic_api_endpoint}/oauth/access_token?client_id=123&client_secret=345").
           with(:body => {:code=>"code", :client_id=>"123", :client_secret=>"345"}.to_json).
           to_return(json_response("web_flow_token.json"))
         response = client.exchange_code_for_token("code")
@@ -55,7 +55,7 @@ describe Staffomatic::Client::Users do
     context 'with credentials passed as parameters by unauthed client' do
       it 'returns the access_token' do
         client = Staffomatic::Client.new
-        post = stub_request(:post, "https://staffomatic.com/login/oauth/access_token").
+        post = stub_request(:post, "#{test_staffomatic_api_endpoint}/oauth/access_token").
           with(:body => {:code=>"code", :client_id=>"id", :client_secret=>"secret"}.to_json).
           to_return(json_response("web_flow_token.json"))
         response = client.exchange_code_for_token('code', 'id', 'secret')

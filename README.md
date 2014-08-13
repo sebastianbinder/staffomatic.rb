@@ -32,7 +32,7 @@ configuration) or as client instance methods.
 Staffomatic.configure do |c|
   c.email = 'admin@demo.de'
   c.password = 'c0d3b4ssssss!'
-  c.api_endpoint = 'http://demo.staffomatic.com'
+  c.account = 'demo.staffomatic.com'
 end
 
 # Fetch the current user
@@ -42,7 +42,7 @@ or
 
 ```ruby
 # Provide authentication credentials
-client = Staffomatic::Client.new(:email => 'admin@demo.de', :password => 'c0d3b4ssssss!', :api_endpoint => 'http://demo.staffomatic.com')
+client = Staffomatic::Client.new(:email => 'admin@demo.de', :password => 'c0d3b4ssssss!', :account => 'demo.staffomatic.com')
 # Fetch the current user
 client.user
 ```
@@ -58,9 +58,9 @@ user = Staffomatic.user '493'
 puts user.email
 # => "admin@demo.de"
 puts user.fields
-# => <Set: {:login, :id, :gravatar_id, :type, :name, :company, :blog, :location, :email, :hireable, :bio, :public_repos, :followers, :following, :created_at, :updated_at, :public_gists}>
+# => <Set: {:created_at, :updated_at, :id, :first_name, :last_name, :account_id, :account_owner, :email, :locale, :full_name, :role, :image, :phone_number_mobile, :phone_number_office, :company, :street, :additional_street, :zip, :city, :country, :invitation_accepted_at, :max_vacation_days, :comments_count, :attachments_count, :commentable, :attachable, :approved_absences_hours, :max_hours_per_month, :department_ids, :invitation_created_at, :invitation_token, :locked_at, :shift_category_ids, :invited_by_id}>
 puts user[:company]
-# => "Staffomatic"
+# => "Pouros, Gleichner and Homenick"
 ```
 
 **Note:** URL fields are culled into a separate `.rels` collection for easier
@@ -92,7 +92,7 @@ making authenticated requests:
 client = Staffomatic::Client.new \
   :email    => 'admin@demo.de',
   :password => 'c0d3b4ssssss!',
-  :api_endpoint => 'http://demo.staffomatic.com'
+  :account => 'demo.staffomatic.com'
 
 user = client.user
 user.email
@@ -116,7 +116,7 @@ To use an access token with the Staffomatic client, pass your token in the
 `:access_token` options parameter in lieu of your username and password:
 
 ```ruby
-client = Staffomatic::Client.new(:access_token => "<your 40 char token>", :api_endpoint => 'http://demo.staffomatic.com')
+client = Staffomatic::Client.new(:access_token => "<your 40 char token>", :account => 'demo.staffomatic.com')
 
 user = client.user
 user.email
@@ -165,14 +165,14 @@ number of client instances based on some shared defaults.
 Every writable attribute in {Staffomatic::Configurable} can be set one at a time:
 
 ```ruby
-Staffomatic.api_endpoint = 'http://demo.staffomatic.com/api/v3'
+Staffomatic.account = 'demo.staffomatic.com/api/v3'
 ```
 
 or in batch:
 
 ```ruby
 Staffomatic.configure do |c|
-  c.api_endpoint = 'http://demo.staffomatic.com/api/v3'
+  c.account = 'demo.staffomatic.com/api/v3'
 end
 ```
 
@@ -183,7 +183,7 @@ attributes will look for a default value from the ENV before returning
 Staffomatic's default.
 
 ```ruby
-# Given $STAFFOMATIC_API_ENDPOINT is "http://demo.staffomatic.com/api/v3"
+# Given $STAFFOMATIC_ACCOUNT is "demo.staffomatic.com"
 Staffomatic.api_endpoint
 
 # => "http://demo.staffomatic.com/api/v3"

@@ -40,15 +40,23 @@ describe Staffomatic::Client do
           :connection_options => {:ssl => {:verify => false}},
           :per_page => 40,
           :email    => "admin@demo.de",
-          :password => "welcome"
+          :password => "welcome",
+          :account  => "demo.staffomatic-api.dev",
+          :scheme   => 'http'
         }
       end
 
       it "overrides module configuration" do
         client = Staffomatic::Client.new(@opts)
+
         expect(client.per_page).to eq(40)
+
         expect(client.email).to eq("admin@demo.de")
         expect(client.instance_variable_get(:"@password")).to eq("welcome")
+        expect(client.scheme).to eq('http')
+        expect(client.account).to eq('demo.staffomatic-api.dev')
+        expect(client.api_endpoint).to eq('http://demo.staffomatic-api.dev/api/v3/')
+
         expect(client.auto_paginate).to eq(Staffomatic.auto_paginate)
         expect(client.client_id).to eq(Staffomatic.client_id)
       end
@@ -102,6 +110,7 @@ describe Staffomatic::Client do
         Staffomatic.configure do |config|
           config.email = 'admin@demo.de'
           config.password = 'welcome'
+          config.account = 'demo.staffomatic-api.dev'
         end
         expect(Staffomatic.client).to be_basic_authenticated
       end
@@ -186,7 +195,7 @@ describe Staffomatic::Client do
         Staffomatic.configure do |config|
           config.email = 'admin@demo.de'
           config.password = 'welcome'
-          config.api_endpoint = test_staffomatic_api_endpoint
+          config.account = 'demo.staffomatic-api.dev'
         end
         root_request = stub_get("http://admin%40demo.de:welcome@demo.staffomatic-api.dev/api")
         Staffomatic.client.get("/api")
@@ -205,7 +214,6 @@ describe Staffomatic::Client do
       end
       it "fetches and memoizes login" do
         client = oauth_client
-
         expect(client.email).to eq(test_staffomatic_email)
         assert_requested :get, staffomatic_url('/user')
       end
@@ -368,6 +376,7 @@ describe Staffomatic::Client do
         config.auto_paginate = true
         config.per_page = 1
         config.access_token = test_staffomatic_token
+        config.account = test_staffomatic_account
       end
     end
 

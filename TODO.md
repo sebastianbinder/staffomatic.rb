@@ -59,10 +59,11 @@ wheneevr STAFFOMATIC_API_ENDPOINT is set.
 
     export STAFFOMATIC_TEST_EMAIL='admin@demo.de'
     export STAFFOMATIC_TEST_PASSWORD="welcome"
-    export STAFFOMATIC_TEST_TOKEN='e8e5a42a6219839580d1952bd8c39538aeaf5796466c2d5652c022a57c9abf92'
+    export STAFFOMATIC_TEST_TOKEN='d18bfe8b9fbd6f8ac4c74dc80d6a67ba216c8971de30758607e7c770eb7989ed'
+    export STAFFOMATIC_ACCOUNT="demo.staffomatic-api.dev"
     export STAFFOMATIC_TEST_CLIENT_ID=""
     export STAFFOMATIC_TEST_CLIENT_SECRET=""
-    export STAFFOMATIC_API_ENDPOINT="http://demo.staffomatic-api.dev/api/v3/"
+
 
     export STAFFOMATIC_EMAIL='admin@demo.de'
     export STAFFOMATIC_PASSWORD="welcome"
