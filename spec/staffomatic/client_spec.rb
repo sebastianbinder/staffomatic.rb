@@ -578,8 +578,8 @@ describe Staffomatic::Client do
   end
 
   it "knows when to raise Unauthorized error" do
-    stub_get('/api/v3/users').to_return(:status => 401)
-    expect { Staffomatic.get('/api/v3/users') }.to raise_error Staffomatic::Unauthorized
+    stub_get('/users').to_return(:status => 401)
+    expect { Staffomatic.get('users') }.to raise_error Staffomatic::Unauthorized
   end
 
 end

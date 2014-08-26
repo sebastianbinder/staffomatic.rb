@@ -82,7 +82,7 @@ module Staffomatic
             @response[:response_headers] &&
             @response[:response_headers][:content_type] =~ /json/
 
-            Sawyer::Agent.serializer.decode(body)
+            Sawyer::Agent.serializer.decode(body) rescue JSON.parse(body).to_hash
           else
             body
           end

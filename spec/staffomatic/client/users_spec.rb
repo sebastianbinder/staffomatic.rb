@@ -27,7 +27,12 @@ describe Staffomatic::Client::Users do
 
   describe ".validate_credentials", :vcr do
     it "validates email and  password" do
-      expect(Staffomatic.validate_credentials(:email => test_staffomatic_email, :password => test_staffomatic_password)).to be true
+      expect(Staffomatic.validate_credentials(
+        :email => test_staffomatic_email,
+        :password => test_staffomatic_password,
+        :account => test_staffomatic_account,
+        :scheme => test_staffomatic_scheme
+      )).to be true
     end
   end # .validate_credentials
 
@@ -41,7 +46,8 @@ describe Staffomatic::Client::Users do
 
   describe ".exchange_code_for_token" do
     context "with application authenticated client" do
-      it "returns the access_token" do
+      xit "returns the access_token" do
+        pending("generating access token with web flow is not yet supported")
         client = Staffomatic::Client.new({client_id: '123', client_secret: '345'})
         request = stub_post("#{test_staffomatic_api_endpoint}/oauth/access_token?client_id=123&client_secret=345").
           with(:body => {:code=>"code", :client_id=>"123", :client_secret=>"345"}.to_json).
@@ -53,7 +59,8 @@ describe Staffomatic::Client::Users do
     end # with application authenticated client
 
     context 'with credentials passed as parameters by unauthed client' do
-      it 'returns the access_token' do
+      xit 'returns the access_token' do
+        pending("generating access token with web flow is not yet supported")
         client = Staffomatic::Client.new
         post = stub_request(:post, "#{test_staffomatic_api_endpoint}/oauth/access_token").
           with(:body => {:code=>"code", :client_id=>"id", :client_secret=>"secret"}.to_json).

@@ -6,6 +6,14 @@ require 'staffomatic/rate_limit'
 require 'staffomatic/user'
 require 'staffomatic/client/authorizations'
 require 'staffomatic/client/users'
+require 'staffomatic/client/locations'
+require 'staffomatic/client/schedules'
+require 'staffomatic/client/shifts'
+require 'staffomatic/client/applications'
+require 'staffomatic/client/absences'
+require 'staffomatic/client/absence_types'
+require 'staffomatic/client/special_days'
+require 'staffomatic/client/news_items'
 require 'staffomatic/client/rate_limit'
 
 module Staffomatic
@@ -20,6 +28,14 @@ module Staffomatic
     include Staffomatic::Client::RateLimit
     include Staffomatic::Client::Authorizations
     include Staffomatic::Client::Users
+    include Staffomatic::Client::Locations
+    include Staffomatic::Client::Schedules
+    include Staffomatic::Client::Shifts
+    include Staffomatic::Client::Applications
+    include Staffomatic::Client::Absences
+    include Staffomatic::Client::AbsenceTypes
+    include Staffomatic::Client::SpecialDays
+    include Staffomatic::Client::NewsItems
 
     # Header keys that can be passed in options hash to {#get},{#head}
     CONVENIENCE_HEADERS = Set.new([:accept, :content_type])
@@ -153,6 +169,7 @@ module Staffomatic
       @agent ||= Sawyer::Agent.new(api_endpoint, sawyer_options) do |http|
         http.headers[:accept] = default_media_type
         http.headers[:user_agent] = user_agent
+        http.headers[:content_type] = content_type
         if basic_authenticated?
           http.basic_auth(@email, @password)
         elsif token_authenticated?

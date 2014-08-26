@@ -38,10 +38,12 @@ module Staffomatic
     #   @return [String] URI for proxy server
     # @!attribute user_agent
     #   @return [String] Configure User-Agent header for requests.
+    # @!attribute content_type
+    #   @return [String] Configure Content-Type header for requests.
 
     attr_accessor :access_token, :auto_paginate, :client_id,
                   :client_secret, :default_media_type, :connection_options,
-                  :middleware, :per_page, :proxy, :user_agent
+                  :middleware, :per_page, :proxy, :user_agent, :content_type
     attr_writer :password, :api_endpoint, :email, :account, :scheme
 
     class << self
@@ -64,7 +66,8 @@ module Staffomatic
           :password,
           :proxy,
           :scheme,
-          :user_agent
+          :user_agent,
+          :content_type
         ]
       end
     end

@@ -288,8 +288,7 @@ ENV Variable | Description |
 `STAFFOMATIC_TEST_TOKEN` | [Personal Access Token](https://staffomatic.com/blog/1509-personal-api-tokens) for the test Staffomatic login.
 `STAFFOMATIC_TEST_CLIENT_ID` | Test OAuth application client id.
 `STAFFOMATIC_TEST_CLIENT_SECRET` | Test OAuth application client secret.
-`STAFFOMATIC_TEST_REPOSITORY` | Test repository to perform destructive actions against, this should not be set to any repository of importance. **Automatically created by the test suite if nonexistent** Default: `api-sandbox`
-`STAFFOMATIC_TEST_ORGANIZATION` | Test organization.
+`STAFFOMATIC_TEST_SCHEME` | Test organization.
 
 Since we periodically refresh our cassettes, please keep some points in mind
 when writing new specs.

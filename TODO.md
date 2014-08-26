@@ -2,114 +2,71 @@
 
 ### API
 
-Add authentication methods
-
-  * email, password
-
 ### Staffomatic.rb
+
+#### General
+
+**scopes e.g.:**
+
+`````ruby
+def all_applications(options = {})
+  paginate "applications", options
+end
+
+def location_applications(location_id, options = {})
+  paginate "locations/#{location_id}/applications", options
+end
+
+def shift_applications(shift_id, options = {})
+  paginate "shifts/#{shift_id}/applications", options
+end
+`````
+
+**common filters e.g.:**
+
+| Param           | Type      | Restriction                    | Ressource                       |
+| --------------- | --------- | ------------------------------ | ------------------------------- |
+| state           | [String]  | new or approved or declined    | Shift, Absences, Applications,  |
+| location_ids    | [Array]   | array with location_ids        | Shift, Absences, Applications,  |
+| user_ids        | [Array]   | array with user_ids            | Shift, Absences, Applications,  |
+| department_ids  | [Array]   | array with department_ids      | Shift, Absences, Applications,  |
+| from and until  | [Time]    | timestamps                     | Shift, Absences, Applications,  |
+| since           | [Time]    | timestamp                      | Shift, Absences, Applications,  |
+| search          | [String]  | search parameter               | Shift, Absences, Applications,  |
+
+
+**attatchable, commentable**
+
+* absences
+* news_items
+* user
+
+
+#### User
+
+* scopes
+* create
+* invite
+* update
 
 ----------
 
-specifics:
-
-definition:
-
-api_endpoint => returns full url:
-
-    https://demo.staffomatic-api.dev/api/v3/
-
-Configuration should be:
-
-    Staffomatic.configure do |c|
-      c.email = 'admin@demo.de'
-      c.password = 'c0d3b4ssssss!'
-      c.account = 'demo.staffomatic.com'
-    end
-
-or:
-
-    Staffomatic.configure do |c|
-      c.access_token = 'c0d3b4ssssss!'
-      c.account = 'demo.staffomatic.com'
-    end
-
-or:
-
-    client = Staffomatic::Client.new(
-      :access_token => ENV.fetch('STAFFOMATIC_TEST_TOKEN'),
-      :account =>  ENV.fetch('STAFFOMATIC_ACCOUNT')
-    )
-
-or:
-
-    ENV['STAFFOMATIC_TOKEN'] = "sometoken"
-    ENV['STAFFOMATIC_ACCOUNT'] = "demo.staffomatic.com"
-    client = Staffomatic::Client.new
-
-does not result in same value:
-
-    * Staffomatic.api_endpoint
-    * Staffomatic.client.api_endpoint
-    * Staffomatic::Default.api_endpoint
 
 wheneevr STAFFOMATIC_API_ENDPOINT is set.
 
-* change `login` aka `username` to `email`
-
-
     export STAFFOMATIC_TEST_EMAIL='admin@demo.de'
     export STAFFOMATIC_TEST_PASSWORD="welcome"
-    export STAFFOMATIC_TEST_TOKEN='d18bfe8b9fbd6f8ac4c74dc80d6a67ba216c8971de30758607e7c770eb7989ed'
+    export STAFFOMATIC_TEST_TOKEN='14f84dd0584049668e499da4323a61c7d08dd9351862e1895c9d96bbdd686235'
     export STAFFOMATIC_ACCOUNT="demo.staffomatic-api.dev"
     export STAFFOMATIC_TEST_CLIENT_ID=""
     export STAFFOMATIC_TEST_CLIENT_SECRET=""
+    export STAFFOMATIC_TEST_SCHEME="http"
 
+some tests need to work:
 
-    export STAFFOMATIC_EMAIL='admin@demo.de'
-    export STAFFOMATIC_PASSWORD="welcome"
-    export STAFFOMATIC_TEST_TOKEN='e8e5a42a6219839580d1952bd8c39538aeaf5796466c2d5652c022a57c9abf92'
-    export STAFFOMATIC_TEST_CLIENT_ID=""
-    export STAFFOMATIC_TEST_CLIENT_SECRET=""
-    export STAFFOMATIC_API_ENDPOINT="http://demo.staffomatic-api.dev/api/v3/"
+    export STAFFOMATIC_SCHEME="http"
 
 ----------
-
-* push `OAuth access tokens` as default auth method.
-
-* Change `Staffomatic.configure` from
-
-  ```ruby
-  Staffomatic.configure do |c|
-    c.login = 'defunkt'
-    c.password = 'c0d3b4ssssss!'
-  end
-  ```
-
-to:
-
-  ```ruby
-  Staffomatic.configure do |c|
-    c.email = 'admin@demo.de'
-    c.password = 'c0d3b4ssssss!'
-    c.account = 'demo.staffomatic.com'
-  end
-  ```
-
-Helpers:
-
-      stack = Faraday::RackBuilder.new do |builder|
-        builder.response :logger
-        builder.use Staffomatic::Response::RaiseError
-        builder.adapter Faraday.default_adapter
-      end
-
-      Staffomatic.middleware = stack
-
-      client = Staffomatic::Client.new(:access_token => ENV.fetch('STAFFOMATIC_TEST_TOKEN'))
-      client.token_authenticated?
-      client.all_users
-
-
 
 * Remove `Two-Factor Authentication`
 

@@ -1,5 +1,4 @@
 require 'staffomatic/response/raise_error'
-require 'staffomatic/response/feed_parser'
 require 'staffomatic/version'
 
 module Staffomatic
@@ -11,7 +10,10 @@ module Staffomatic
     SCHEME = "https".freeze
 
     # Default User Agent header string
-    USER_AGENT   = "Staffomatic Ruby Gem #{Staffomatic::VERSION}".freeze
+    USER_AGENT = "Staffomatic Ruby Gem #{Staffomatic::VERSION}".freeze
+
+    # Default Content Type header string
+    CONTENT_TYPE = "application/json".freeze
 
     # Default media type
     MEDIA_TYPE   = "application/vnd.staffomatic.v3+json"
@@ -130,6 +132,12 @@ module Staffomatic
       # @return [String]
       def user_agent
         ENV['STAFFOMATIC_USER_AGENT'] || USER_AGENT
+      end
+
+      # Default User-Agent header string from ENV or {USER_AGENT}
+      # @return [String]
+      def content_type
+        ENV['STAFFOMATIC_CONTENT_TYPE'] || CONTENT_TYPE
       end
 
     end

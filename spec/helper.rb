@@ -78,7 +78,7 @@ VCR.configure do |c|
   end
 
   c.ignore_request do |request|
-    !!request.headers['X-Vcr-Test-Repo-Setup']
+    true#!!request.headers['X-Vcr-Test-Repo-Setup']
   end
 
   c.default_cassette_options = {
@@ -128,6 +128,10 @@ end
 
 def test_staffomatic_org
   ENV.fetch 'STAFFOMATIC_TEST_ORGANIZATION', 'api-playground'
+end
+
+def test_staffomatic_scheme
+  ENV.fetch 'STAFFOMATIC_TEST_SCHEME', 'http'
 end
 
 def stub_delete(url)
@@ -204,7 +208,8 @@ end
 def oauth_client
   Staffomatic::Client.new(
     :access_token => test_staffomatic_token,
-    :account => test_staffomatic_account
+    :account => test_staffomatic_account,
+    :scheme => test_staffomatic_scheme
   )
 end
 
