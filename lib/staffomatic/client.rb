@@ -8,6 +8,7 @@ require 'staffomatic/client/authorizations'
 require 'staffomatic/client/users'
 require 'staffomatic/client/locations'
 require 'staffomatic/client/schedules'
+require 'staffomatic/client/departments'
 require 'staffomatic/client/shifts'
 require 'staffomatic/client/applications'
 require 'staffomatic/client/absences'
@@ -30,6 +31,7 @@ module Staffomatic
     include Staffomatic::Client::Users
     include Staffomatic::Client::Locations
     include Staffomatic::Client::Schedules
+    include Staffomatic::Client::Departments
     include Staffomatic::Client::Shifts
     include Staffomatic::Client::Applications
     include Staffomatic::Client::Absences
