@@ -22,6 +22,20 @@ module Staffomatic
         paginate "users", options
       end
 
+      # List location users
+      #
+      # @param location_id [Integer] Location id.
+      # @param options [Hash] Optional options.
+      # @option options [Integer] :since The integer ID of the last User that
+      #   you’ve seen.
+      #
+      # @see https://developer.github.com/v3/users/#get-all-users
+      #
+      # @return [Array<Sawyer::Resource>] List of Staffomatic users.
+      def location_users(location_id, options = {})
+        paginate "locations/#{location_id}/users", options
+      end
+
       # Get a single user
       #
       # @param user [Integer, String] Staffomatic user id.
@@ -71,19 +85,65 @@ module Staffomatic
       # Update the authenticated user
       #
       # @param options [Hash] A customizable set of options.
-      # @option options [String] :name
-      # @option options [String] :email Publically visible email address.
-      # @option options [String] :blog
-      # @option options [String] :company
-      # @option options [String] :location
-      # @option options [Boolean] :hireable
-      # @option options [String] :bio
       # @return [Sawyer::Resource]
       # @see https://developer.github.com/v3/users/#update-the-authenticated-user
       # @example
-      #   Staffomatic.update_user(:name => "Erik Michaels-Ober", :email => "sferik@gmail.com", :company => "Code for America", :location => "San Francisco", :hireable => false)
-      def update_user(options)
-        patch "user", options
+      #   Staffomatic.update_user(493, :name => "Erik Michaels-Ober", :email => "sferik@gmail.com", :company => "Code for America", :location => "San Francisco", :hireable => false)
+      def update_user(user_id, options)
+        patch "users/#{user_id}", options
+      end
+
+      # Lock access for user
+      #
+      # @param user_id [Integer] A Staffomatic user id.
+      # @return [Sawyer::Resource]
+      # @see https://developer.github.com/v3/users/#lock-user
+      # @example
+      #   Staffomatic.lock_user(493)
+      def lock_user(user_id)
+        patch "users/#{user_id}", :user => {:do => 'lock'}
+      end
+
+      # Unlock Access for user
+      #
+      # @param user_id [Integer] A Staffomatic user id.
+      # @return [Sawyer::Resource]
+      # @see https://developer.github.com/v3/users/#lock-user
+      # @example
+      #   Staffomatic.lock_user(493)
+      def unlock_user(user_id)
+        patch "users/#{user_id}", :user => {:do => 'unlock'}
+      end
+
+      # Invite a user
+      #
+      # @return [Sawyer::Resource] Your newly created users
+      # @see https://developer.github.com/v3/users/#create-an-users
+      # @example Create a new Location
+      #   Octokit.create_users()
+      def invite_user(options)
+        post "users", :user => options.merge({:do => 'send_invitation'})
+      end
+
+      # Create a user
+      #
+      # @return [Sawyer::Resource] Your newly created users
+      # @see https://developer.github.com/v3/users/#create-an-users
+      # @example Create a new Location
+      #   Octokit.create_users()
+      def create_user(options)
+        post "users", :user => options
+      end
+
+      # Delete a single user
+      #
+      # @param user_id [Integer] A Staffomatic user
+      # @return [Boolean] Success
+      # @see https://developer.github.com/v3/users/#delete-a-user
+      # @example Delete the user #1194549
+      #   Staffomatic.delete_user(1194549)
+      def delete_user(user_id, options = {})
+        boolean_from_response :delete, "users/#{user_id}", options
       end
 
     end
