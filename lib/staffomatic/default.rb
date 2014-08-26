@@ -24,7 +24,6 @@ module Staffomatic
     # Default Faraday middleware stack
     MIDDLEWARE = RACK_BUILDER_CLASS.new do |builder|
       builder.use Staffomatic::Response::RaiseError
-      builder.use Staffomatic::Response::FeedParser
       builder.adapter Faraday.default_adapter
     end
 
