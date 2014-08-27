@@ -24,6 +24,10 @@ module Staffomatic
         paginate "locations/#{location_id}/applications", options
       end
 
+      def schedule_applications(schedule_id, options = {})
+        paginate "schedules/#{schedule_id}/applications", options
+      end
+
       def shift_applications(shift_id, options = {})
         paginate "shifts/#{shift_id}/applications", options
       end

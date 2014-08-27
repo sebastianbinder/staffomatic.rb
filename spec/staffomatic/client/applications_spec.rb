@@ -12,6 +12,18 @@ describe Staffomatic::Client::Applications do
       applications = @client.all_applications
       expect(applications).to be_kind_of Array
     end
+    fit "returns all location applications" do
+      applications = @client.location_applications(64)
+      expect(applications).to be_kind_of Array
+    end
+    fit "returns all schedule applications" do
+      applications = @client.schedule_applications(71935)
+      expect(applications).to be_kind_of Array
+    end
+    fit "returns all shift applications" do
+      applications = @client.shift_applications(2602188)
+      expect(applications).to be_kind_of Array
+    end
   end # .all_applications
 
   describe ".application", :vcr do
