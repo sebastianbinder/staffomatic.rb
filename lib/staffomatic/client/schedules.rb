@@ -20,6 +20,18 @@ module Staffomatic
         paginate "schedules", options
       end
 
+      # List location schedules
+      #
+      # @param location_id [Integer] Location id.
+      # @param options [Hash] Optional options.
+      #
+      # @see https://developer.github.com/v3/schedules/#get-location-schedules
+      #
+      # @return [Array<Sawyer::Resource>] List of Staffomatic schedules.
+      def location_schedules(location_id, options = {})
+        paginate "locations/#{location_id}/schedules", options
+      end
+
       # Get a single schedule
       #
       # @param schedule_id [Integer] Staffomatic schedule id.

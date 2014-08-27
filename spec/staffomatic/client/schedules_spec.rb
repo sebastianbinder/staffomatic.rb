@@ -12,6 +12,10 @@ describe Staffomatic::Client::Schedules do
       schedules = @client.all_schedules
       expect(schedules).to be_kind_of Array
     end
+    it "returns all locations schedules" do
+      schedules = @client.location_schedules(64)
+      expect(schedules).to be_kind_of Array
+    end
   end # .all_schedules
 
   describe ".schedule", :vcr do
