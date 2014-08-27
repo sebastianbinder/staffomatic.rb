@@ -12,6 +12,14 @@ describe Staffomatic::Client::Shifts do
       shifts = @client.all_shifts
       expect(shifts).to be_kind_of Array
     end
+    fit "returns all locations shifts" do
+      shifts = @client.location_shifts(64)
+      expect(shifts).to be_kind_of Array
+    end
+    it "returns all schedule shifts" do
+      shifts = @client.schedule_shifts(71935)
+      expect(shifts).to be_kind_of Array
+    end
   end # .all_shifts
 
   describe ".shift", :vcr do

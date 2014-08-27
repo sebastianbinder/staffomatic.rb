@@ -20,6 +20,30 @@ module Staffomatic
         paginate "shifts", options
       end
 
+      # List all location shifts
+      #
+      # @param location_id [Integer] Location id.
+      # @param options [Hash] Optional options.
+      #
+      # @see https://developer.github.com/v3/shifts/#get-all-shifts
+      #
+      # @return [Array<Sawyer::Resource>] List of Staffomatic shifts.
+      def location_shifts(location_id, options = {})
+        paginate "locations/#{location_id}/shifts", options
+      end
+
+      # List all schedule shifts
+      #
+      # @param schedule_id [Integer] Schedule id.
+      # @param options [Hash] Optional options.
+      #
+      # @see https://developer.github.com/v3/shifts/#get-all-shifts
+      #
+      # @return [Array<Sawyer::Resource>] List of Staffomatic shifts.
+      def schedule_shifts(schedule_id, options = {})
+        paginate "schedules/#{schedule_id}/shifts", options
+      end
+
       # Get a single shift
       #
       # @param shift_id [Integer] Staffomatic shift id.
