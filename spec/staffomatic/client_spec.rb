@@ -41,8 +41,8 @@ describe Staffomatic::Client do
           :per_page => 40,
           :email    => "admin@demo.de",
           :password => "welcome",
-          :account  => "demo.staffomatic-api.dev",
-          :scheme   => 'http'
+          :account  => "demo",
+          :scheme   => 'https'
         }
       end
 
@@ -53,9 +53,9 @@ describe Staffomatic::Client do
 
         expect(client.email).to eq("admin@demo.de")
         expect(client.instance_variable_get(:"@password")).to eq("welcome")
-        expect(client.scheme).to eq('http')
-        expect(client.account).to eq('demo.staffomatic-api.dev')
-        expect(client.api_endpoint).to eq('http://demo.staffomatic-api.dev/api/v3/')
+        expect(client.scheme).to eq('https')
+        expect(client.account).to eq('demo')
+        expect(client.api_endpoint).to eq('https://api.staffomaticapp.com/v3/demo/')
 
         expect(client.auto_paginate).to eq(Staffomatic.auto_paginate)
         expect(client.client_id).to eq(Staffomatic.client_id)

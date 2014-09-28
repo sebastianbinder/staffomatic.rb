@@ -50,7 +50,7 @@ module Staffomatic
       # Default API endpoint from ENV or build from ENV
       # @return [String]
       def api_endpoint
-        ENV['API_ENDPOINT'] || "#{self.scheme}://#{ENV['STAFFOMATIC_ACCOUNT']}/api/v3"
+        ENV['API_ENDPOINT'] || "https://api.staffomaticapp.com/v3/#{account}"
       end
 
       # Default account from ENV

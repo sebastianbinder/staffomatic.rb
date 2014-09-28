@@ -102,12 +102,12 @@ end
 
 # always with version specification
 def test_staffomatic_api_endpoint
-  ENV.fetch 'STAFFOMATIC_TEST_API_ENDPOINT', 'http://demo.staffomatic-api.dev/api/v3'
+  ENV.fetch 'STAFFOMATIC_TEST_API_ENDPOINT', "https://api.staffomaticapp.com/v3/#{test_staffomatic_account}"
 end
 
 # always with version specification
 def test_staffomatic_account
-  ENV.fetch 'STAFFOMATIC_TEST_ACCOUNT', 'demo.staffomatic-api.dev'
+  ENV.fetch 'STAFFOMATIC_TEST_ACCOUNT', 'demo'
 end
 
 def test_staffomatic_token
@@ -177,13 +177,10 @@ end
 
 def staffomatic_url(url)
   return url if url =~ /^http/
-
   url.gsub!("/api/v3", "")
-
   url = File.join(test_staffomatic_api_endpoint, url)
   uri = Addressable::URI.parse(url)
   uri.path.gsub!("v3//", "v3/")
-
   uri.to_s
 end
 
