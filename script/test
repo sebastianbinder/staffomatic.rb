@@ -7,6 +7,7 @@ script/bootstrap --quiet
 
 for testvar in LOGIN PASSWORD TOKEN CLIENT_ID CLIENT_SECRET
 do
+  echo "Please export STAFFOMATIC_ACCOUNT";
   staffomaticvar="STAFFOMATIC_TEST_${testvar}"
   if [[ -z "${!staffomaticvar}" ]]; then
       echo "Please export ${staffomaticvar}";
