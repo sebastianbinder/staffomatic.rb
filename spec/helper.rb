@@ -21,59 +21,56 @@ RSpec.configure do |config|
   config.run_all_when_everything_filtered = true
   config.raise_errors_for_deprecations!
   config.before(:all) do
-    @test_repo = "#{test_staffomatic_email}/#{test_staffomatic_repository}"
-    @test_org_repo = "#{test_staffomatic_org}/#{test_staffomatic_repository}"
+    @test_repo = "#{test_staffomatic_email}/#{test_staffomatic_location}"
+    @test_org_repo = "#{test_staffomatic_account}/#{test_staffomatic_location}"
   end
 end
 
 require 'vcr'
 VCR.configure do |c|
   c.configure_rspec_metadata!
-  c.filter_sensitive_data("<GITHUB_LOGIN>") do
+  c.filter_sensitive_data("<STAFFOMATIC_EMAIL>") do
     test_staffomatic_email
   end
-  c.filter_sensitive_data("<GITHUB_PASSWORD>") do
+  c.filter_sensitive_data("<STAFFOMATIC_PASSWORD>") do
     test_staffomatic_password
   end
   c.filter_sensitive_data("<<ACCESS_TOKEN>>") do
     test_staffomatic_token
   end
-  c.filter_sensitive_data("<GITHUB_CLIENT_ID>") do
+  c.filter_sensitive_data("<STAFFOMATIC_CLIENT_ID>") do
     test_staffomatic_client_id
   end
-  c.filter_sensitive_data("<GITHUB_CLIENT_SECRET>") do
+  c.filter_sensitive_data("<STAFFOMATIC_CLIENT_SECRET>") do
     test_staffomatic_client_secret
   end
-  c.define_cassette_placeholder("<GITHUB_TEST_REPOSITORY>") do
-    test_staffomatic_repository
+  c.define_cassette_placeholder("<STAFFOMATIC_TEST_LOCATION>") do
+    test_staffomatic_location
   end
-  c.define_cassette_placeholder("<GITHUB_TEST_ORGANIZATION>") do
-    test_staffomatic_org
-  end
-  c.define_cassette_placeholder("<GITHUB_TEST_ORG_TEAM_ID>") do
-    "10050505050000"
+  c.define_cassette_placeholder("<STAFFOMATIC_TEST_ACCOUNT>") do
+    test_staffomatic_account
   end
 
   c.before_http_request(:real?) do |request|
     next if request.headers['X-Vcr-Test-Repo-Setup']
-    next unless request.uri.include? test_staffomatic_repository
+    next unless request.uri.include? test_staffomatic_location
 
     options = {
-      :headers => {'X-Vcr-Test-Repo-Setup' => 'true'},
+      :headers => {'X-Vcr-Test-Location-Setup' => 'true'},
       :auto_init => true
     }
 
-    test_repo = "#{test_staffomatic_email}/#{test_staffomatic_repository}"
+    test_repo = "#{test_staffomatic_email}/#{test_staffomatic_location}"
     if !oauth_client.repository?(test_repo, options)
       Staffomatic.staffomatic_warn "NOTICE: Creating #{test_repo} test repository."
-      oauth_client.create_repository(test_staffomatic_repository, options)
+      oauth_client.create_repository(test_staffomatic_location, options)
     end
 
-    test_org_repo = "#{test_staffomatic_org}/#{test_staffomatic_repository}"
+    test_org_repo = "#{test_staffomatic_account}/#{test_staffomatic_location}"
     if !oauth_client.repository?(test_org_repo, options)
       Staffomatic.staffomatic_warn "NOTICE: Creating #{test_org_repo} test repository."
-      options[:organization] = test_staffomatic_org
-      oauth_client.create_repository(test_staffomatic_repository, options)
+      options[:organization] = test_staffomatic_account
+      oauth_client.create_repository(test_staffomatic_location, options)
     end
   end
 
@@ -122,12 +119,12 @@ def test_staffomatic_client_secret
   ENV.fetch 'STAFFOMATIC_TEST_CLIENT_SECRET', 'x' * 40
 end
 
-def test_staffomatic_repository
-  ENV.fetch 'STAFFOMATIC_TEST_REPOSITORY', 'api-sandbox'
+def test_staffomatic_location
+  ENV.fetch 'STAFFOMATIC_TEST_LOCATION', 'api-sandbox'
 end
 
-def test_staffomatic_org
-  ENV.fetch 'STAFFOMATIC_TEST_ORGANIZATION', 'api-playground'
+def test_staffomatic_account
+  ENV.fetch 'STAFFOMATIC_TEST_ACCOUNT', 'demo'
 end
 
 def test_staffomatic_scheme
