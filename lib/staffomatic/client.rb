@@ -234,8 +234,9 @@ module Staffomatic
     # Build api_enpoint from options or defaults
     #
     # @return [String] Base URL for API requests.
-    def api_endpoint
-      File.join("https://api.staffomaticapp.com/v3/#{@account}", "")
+    def api_endpoint=(value)
+      reset_agent
+      @api_endpoint = value
     end
 
     # Set value to build api_enpoint
