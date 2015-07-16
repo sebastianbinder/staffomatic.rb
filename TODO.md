@@ -54,7 +54,7 @@ end
 
 wheneevr STAFFOMATIC_API_ENDPOINT is set.
 
-    export STAFFOMATIC_TEST_EMAIL='admin@demo.de'
+    export STAFFOMATIC_TEST_EMAIL='admin@easypep.de'
     export STAFFOMATIC_TEST_PASSWORD="welcome"
     export STAFFOMATIC_TEST_TOKEN='14f84dd0584049668e499da4323a61c7d08dd9351862e1895c9d96bbdd686235'
     export STAFFOMATIC_ACCOUNT="demo"

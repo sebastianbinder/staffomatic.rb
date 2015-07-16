@@ -42,17 +42,16 @@ describe Staffomatic::Client do
           :email        => "admin@easypep.de",
           :password     => "welcome",
           :account      => "demo",
-          :scheme       => 'https',
-          :api_endpoint => 'https://api.staffomaticapp.com/v3/demo'
+          :scheme       => 'https'
         }
       end
 
-      it "overrides module configuration" do
+      fit "overrides module configuration" do
         client = Staffomatic::Client.new(@opts)
 
         expect(client.per_page).to eq(40)
 
-        expect(client.email).to eq("admin@demo.de")
+        expect(client.email).to eq("admin@easypep.de")
         expect(client.instance_variable_get(:"@password")).to eq("welcome")
         expect(client.scheme).to eq('https')
         expect(client.account).to eq('demo')
@@ -76,7 +75,7 @@ describe Staffomatic::Client do
         expect(client.client_id).to eq(Staffomatic.client_id)
       end
 
-      it "set development client configs" do
+      fit "set development client configs" do
         Staffomatic.reset!
         client = Staffomatic::Client.new(
           scheme: 'http',
