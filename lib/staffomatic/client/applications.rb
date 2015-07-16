@@ -52,7 +52,7 @@ module Staffomatic
       # @example
       #   Staffomatic.update_applications(:name => "Erik Michaels-Ober")
       def update_application(application_id, options)
-        patch "applications/#{application_id}", :application => options
+        patch "applications/#{application_id}", options
       end
 
       # Accept! an applied application
