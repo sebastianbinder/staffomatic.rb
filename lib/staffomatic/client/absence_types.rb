@@ -52,7 +52,7 @@ module Staffomatic
       # @example
       #   Staffomatic.update_absence_types(:name => "Erik Michaels-Ober")
       def update_absence_type(absence_type_id, options)
-        patch "absence_types/#{absence_type_id}", :absence_type => options
+        patch "absence_types/#{absence_type_id}", options
       end
 
       # Create a absence_type
@@ -63,7 +63,7 @@ module Staffomatic
       # @example Create a new Location
       #   Octokit.create_absence_types()
       def create_absence_type(location_id, options)
-        post "locations/#{location_id}/absence_types", :absence_type => options
+        post "locations/#{location_id}/absence_types", options
       end
 
       # Delete a single absence_type

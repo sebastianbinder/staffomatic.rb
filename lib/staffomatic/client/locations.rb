@@ -41,7 +41,7 @@ module Staffomatic
       # @example
       #   Staffomatic.update_locations(:name => "Erik Michaels-Ober")
       def update_location(location_id, options)
-        patch "locations/#{location_id}", :location => options
+        patch "locations/#{location_id}", options
       end
 
       # Create a location
@@ -52,7 +52,7 @@ module Staffomatic
       # @example Create a new Location
       #   Octokit.create_locations()
       def create_location(name, options = {})
-        post "locations", :location => options.merge({:name => name})
+        post "locations", options.merge({:name => name})
       end
 
       # Delete a single location

@@ -52,7 +52,7 @@ module Staffomatic
       # @example
       #   Staffomatic.update_absences(:name => "Erik Michaels-Ober")
       def update_absence(absence_id, options)
-        patch "absences/#{absence_id}", :absence => options
+        patch "absences/#{absence_id}", options
       end
 
       # Approve! a absence
@@ -64,7 +64,7 @@ module Staffomatic
       # @example
       #   Staffomatic.publish_absence(123)
       def approve_absence(absence_id, options = {})
-        patch "absences/#{absence_id}", :absence => options.merge({:do => 'approve'})
+        patch "absences/#{absence_id}", options.merge({:do => 'approve'})
       end
 
       # Decline! a absence
@@ -76,7 +76,7 @@ module Staffomatic
       # @example
       #   Staffomatic.publish_absence(123)
       def decline_absence(absence_id, options = {})
-        patch "absences/#{absence_id}", :absence => options.merge({:do => 'decline'})
+        patch "absences/#{absence_id}", options.merge({:do => 'decline'})
       end
 
       # Create absence
@@ -87,7 +87,7 @@ module Staffomatic
       # @example Create a new Location
       #   Octokit.create_absences()
       def create_absence(options = {})
-        post "absences", :absence => options
+        post "absences", options
       end
 
       # Delete a single absence

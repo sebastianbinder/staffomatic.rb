@@ -52,7 +52,7 @@ module Staffomatic
       # @example
       #   Staffomatic.update_schedules(:name => "Erik Michaels-Ober")
       def update_schedule(schedule_id, options)
-        patch "schedules/#{schedule_id}", :schedule => options
+        patch "schedules/#{schedule_id}", options
       end
 
       # Publish a schedule
@@ -64,7 +64,7 @@ module Staffomatic
       # @example
       #   Staffomatic.publish_schedule(123)
       def publish_schedule(schedule_id, options = {})
-        patch "schedules/#{schedule_id}", :schedule => options.merge({:do => 'publish'})
+        patch "schedules/#{schedule_id}", options.merge({:do => 'publish'})
       end
 
       # Republish a schedule
@@ -76,7 +76,7 @@ module Staffomatic
       # @example
       #   Staffomatic.publish_schedule(123)
       def republish_schedule(schedule_id, options = {})
-        patch "schedules/#{schedule_id}", :schedule => options.merge({:do => 'republish'})
+        patch "schedules/#{schedule_id}", options.merge({:do => 'republish'})
       end
 
       # Bulk delete schedule shifts
@@ -89,7 +89,7 @@ module Staffomatic
       # @example
       #   Staffomatic.publish_schedule(123)
       def bulk_delete_schedule_shifts(schedule_id, department_ids = [], options = {})
-        patch "schedules/#{schedule_id}", :schedule => options.merge({:do => 'bulk_destroy', :department_ids => department_ids})
+        patch "schedules/#{schedule_id}", options.merge({:do => 'bulk_destroy', :department_ids => department_ids})
       end
 
       # Import shifts from another schedule
@@ -103,7 +103,7 @@ module Staffomatic
       # @example
       #   Staffomatic.publish_schedule(123)
       def import_shifts_from_schedule(schedule_id, import_schedule_id, import_assignments = false, department_ids = [], options = {})
-        patch "schedules/#{schedule_id}", :schedule => options.merge({:do => 'import_shifts', :import_schedule_id => import_schedule_id, :import_assignments => import_assignments, :department_ids => department_ids})
+        patch "schedules/#{schedule_id}", options.merge({:do => 'import_shifts', :import_schedule_id => import_schedule_id, :import_assignments => import_assignments, :department_ids => department_ids})
       end
 
       # Accepts applications in schedule
@@ -118,7 +118,7 @@ module Staffomatic
       # @example
       #   Staffomatic.publish_schedule(123)
       def accept_applications_in_schedule(schedule_id, respect_max_hours_per_month, department_ids = [], user_ids = [], options = {})
-        patch "schedules/#{schedule_id}", :schedule => options.merge({:do => 'bulk_accept',
+        patch "schedules/#{schedule_id}", options.merge({:do => 'bulk_accept',
           :respect_max_hours_per_month => respect_max_hours_per_month,
           :department_ids => department_ids,
           :user_ids => user_ids
@@ -133,7 +133,7 @@ module Staffomatic
       # @example Create a new Location
       #   Octokit.create_schedules()
       def create_schedule(location_id, options)
-        post "locations/#{location_id}/schedules", :schedule => options
+        post "locations/#{location_id}/schedules", options
       end
 
       # Delete a single schedule

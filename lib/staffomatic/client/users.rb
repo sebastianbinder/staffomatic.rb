@@ -101,7 +101,7 @@ module Staffomatic
       # @example
       #   Staffomatic.lock_user(493)
       def lock_user(user_id)
-        patch "users/#{user_id}", :user => {:do => 'lock'}
+        patch "users/#{user_id}", {:do => 'lock'}
       end
 
       # Unlock Access for user
@@ -112,7 +112,7 @@ module Staffomatic
       # @example
       #   Staffomatic.lock_user(493)
       def unlock_user(user_id)
-        patch "users/#{user_id}", :user => {:do => 'unlock'}
+        patch "users/#{user_id}", {:do => 'unlock'}
       end
 
       # Invite a user
@@ -122,7 +122,7 @@ module Staffomatic
       # @example Create a new Location
       #   Octokit.create_users()
       def invite_user(options)
-        post "users", :user => options.merge({:do => 'send_invitation'})
+        post "users", options.merge({:do => 'send_invitation'})
       end
 
       # Create a user
@@ -132,7 +132,7 @@ module Staffomatic
       # @example Create a new Location
       #   Octokit.create_users()
       def create_user(options)
-        post "users", :user => options
+        post "users", options
       end
 
       # Delete a single user

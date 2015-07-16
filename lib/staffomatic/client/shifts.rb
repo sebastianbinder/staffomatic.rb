@@ -64,7 +64,7 @@ module Staffomatic
       # @example
       #   Staffomatic.update_shifts(:name => "Erik Michaels-Ober")
       def update_shift(shift_id, options)
-        patch "shifts/#{shift_id}", :shift => options
+        patch "shifts/#{shift_id}", options
       end
 
       # Create a shift
@@ -75,7 +75,7 @@ module Staffomatic
       # @example Create a new Location
       #   Octokit.create_shifts()
       def create_shift(schedule_id, department_id, options)
-        post "schedules/#{schedule_id}/shifts", :shift => options.merge(:department_id => department_id)
+        post "schedules/#{schedule_id}/shifts", options.merge(:department_id => department_id)
       end
 
       # Delete a single shift

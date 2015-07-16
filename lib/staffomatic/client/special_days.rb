@@ -52,7 +52,7 @@ module Staffomatic
       # @example
       #   Staffomatic.update_special_days(:name => "Erik Michaels-Ober")
       def update_special_day(special_day_id, options)
-        patch "special_days/#{special_day_id}", :special_day => options
+        patch "special_days/#{special_day_id}", options
       end
 
       # Create a special_day
@@ -63,7 +63,7 @@ module Staffomatic
       # @example Create a new Location
       #   Octokit.create_special_days()
       def create_special_day(location_id, options)
-        post "locations/#{location_id}/special_days", :special_day => options
+        post "locations/#{location_id}/special_days", options
       end
 
       # Delete a single special_day

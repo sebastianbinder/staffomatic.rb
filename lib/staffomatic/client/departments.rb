@@ -52,7 +52,7 @@ module Staffomatic
       # @example
       #   Staffomatic.update_departments(:name => "Erik Michaels-Ober")
       def update_department(department_id, options)
-        patch "departments/#{department_id}", :department => options
+        patch "departments/#{department_id}", options
       end
 
       # Create a department
@@ -63,7 +63,7 @@ module Staffomatic
       # @example Create a new Location
       #   Octokit.create_departments()
       def create_department(location_id, options)
-        post "locations/#{location_id}/departments", :department => options
+        post "locations/#{location_id}/departments", options
       end
 
       # Delete a single department

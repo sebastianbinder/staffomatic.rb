@@ -52,7 +52,7 @@ module Staffomatic
       # @example
       #   Staffomatic.update_news_items(:name => "Erik Michaels-Ober")
       def update_news_item(news_item_id, options)
-        patch "news_items/#{news_item_id}", :news_item => options
+        patch "news_items/#{news_item_id}", options
       end
 
       # Create a news_item
@@ -63,7 +63,7 @@ module Staffomatic
       # @example Create a new Location
       #   Octokit.create_news_items()
       def create_news_item(location_id, options)
-        post "locations/#{location_id}/news_items", :news_item => options
+        post "locations/#{location_id}/news_items", options
       end
 
       # Delete a single news_item
