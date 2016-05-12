@@ -31,8 +31,8 @@ configuration) or as client instance methods.
 # Provide authentication credentials
 Staffomatic.configure do |c|
   c.email = 'admin@easypep.de'
-  c.password = 'welcome'
-  c.account = 'demo'
+  c.password = 'welcome!'
+  c.api_endpoint = 'https://api.staffomaticapp.com/v3/demo'
 end
 
 # Fetch the current user
@@ -42,7 +42,7 @@ or
 
 ```ruby
 # Provide authentication credentials
-client = Staffomatic::Client.new(:email => 'admin@easypep.de', :password => 'welcome!', :account => 'demo')
+client = Staffomatic::Client.new(:email => 'admin@easypep.de', :password => 'welcome!', :api_endpoint => 'https://api.staffomaticapp.com/v3/demo')
 # Fetch the current user
 client.user
 ```
