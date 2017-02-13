@@ -46,7 +46,7 @@ describe Staffomatic::Client do
         }
       end
 
-      fit "overrides module configuration" do
+      it "overrides module configuration" do
         client = Staffomatic::Client.new(@opts)
 
         expect(client.per_page).to eq(40)
@@ -75,7 +75,7 @@ describe Staffomatic::Client do
         expect(client.client_id).to eq(Staffomatic.client_id)
       end
 
-      fit "set development client configs" do
+      it "set development client configs" do
         Staffomatic.reset!
         client = Staffomatic::Client.new(
           scheme: 'http',

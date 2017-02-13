@@ -22,7 +22,7 @@ group :test do
   gem 'rspec', '~> 3.0.0'
   gem 'simplecov', :require => false
   gem 'vcr', '~> 2.9.2'
-  gem 'webmock', '>= 1.9'
+  gem 'webmock', '>= 2.3.2'
 end
 
 platforms :rbx do

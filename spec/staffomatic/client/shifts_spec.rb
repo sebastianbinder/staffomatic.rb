@@ -12,7 +12,7 @@ describe Staffomatic::Client::Shifts do
       shifts = @client.all_shifts
       expect(shifts).to be_kind_of Array
     end
-    fit "returns all locations shifts" do
+    it "returns all locations shifts" do
       shifts = @client.location_shifts(64)
       expect(shifts).to be_kind_of Array
     end

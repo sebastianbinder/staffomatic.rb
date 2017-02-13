@@ -37,7 +37,7 @@ describe Staffomatic::Client::Departments do
   end # .update_departments
 
   describe ".create_department", :vcr do
-    fit "creates a department" do
+    it "creates a department" do
       department = @client.create_department(64, { :name => "Door",
                                                    :primary_color => "7ed0cf",
                                                    :user_ids => [493] })
