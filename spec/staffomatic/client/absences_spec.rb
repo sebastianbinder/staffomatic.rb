@@ -60,7 +60,7 @@ describe Staffomatic::Client::Absences do
 
   describe ".create_absence", :vcr do
 
-    fit "creates an absence" do
+    it "creates an absence" do
       absence = @client.create_absence({
         starts_at: "2014-09-20T07:20:00.000+02:00",
         ends_at: "2014-09-26T07:40:00.000+02:00",
