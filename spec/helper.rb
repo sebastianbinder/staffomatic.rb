@@ -91,7 +91,7 @@ VCR.configure do |c|
   end
 
   c.ignore_request do |request|
-    true#!!request.headers['X-Vcr-Test-Repo-Setup']
+    !!request.headers['X-Vcr-Test-Repo-Setup']
   end
 
   c.default_cassette_options = {
