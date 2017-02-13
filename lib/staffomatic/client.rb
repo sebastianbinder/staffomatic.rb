@@ -17,6 +17,8 @@ require 'staffomatic/client/absence_types'
 require 'staffomatic/client/special_days'
 require 'staffomatic/client/news_items'
 require 'staffomatic/client/work_reports'
+require 'staffomatic/client/work_timers'
+require 'staffomatic/client/break_timers'
 require 'staffomatic/client/rate_limit'
 
 module Staffomatic
@@ -41,6 +43,8 @@ module Staffomatic
     include Staffomatic::Client::AbsenceTypes
     include Staffomatic::Client::SpecialDays
     include Staffomatic::Client::WorkReports
+    include Staffomatic::Client::WorkTimers
+    include Staffomatic::Client::BreakTimers
     include Staffomatic::Client::NewsItems
 
     # Header keys that can be passed in options hash to {#get},{#head}

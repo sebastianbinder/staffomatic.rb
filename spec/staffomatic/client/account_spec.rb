@@ -8,14 +8,14 @@ describe Staffomatic::Client::Account do
   end
 
   describe ".account", :vcr do
-    fit "returns account" do
+    it "returns account" do
       account = @client.get_account
       expect(account.name).to eq('staffomatic-rb')
     end
   end # .account
 
   describe ".update_account", :vcr do
-    fit "updates a account" do
+    it "updates a account" do
       account = @client.update_account({:reports_editable_for_staff => false})
       expect(account.reports_editable_for_staff).to eq false
       assert_requested :patch, staffomatic_url("/account")
