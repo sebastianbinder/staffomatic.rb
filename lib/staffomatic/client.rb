@@ -6,6 +6,7 @@ require 'staffomatic/rate_limit'
 require 'staffomatic/user'
 require 'staffomatic/client/authorizations'
 require 'staffomatic/client/users'
+require 'staffomatic/client/account'
 require 'staffomatic/client/locations'
 require 'staffomatic/client/schedules'
 require 'staffomatic/client/departments'
@@ -29,6 +30,7 @@ module Staffomatic
     include Staffomatic::Client::RateLimit
     include Staffomatic::Client::Authorizations
     include Staffomatic::Client::Users
+    include Staffomatic::Client::Account
     include Staffomatic::Client::Locations
     include Staffomatic::Client::Schedules
     include Staffomatic::Client::Departments
