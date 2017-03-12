@@ -146,6 +146,10 @@ module Staffomatic
         post "shifts/#{shift_id}/applications", :application => options.merge({:user_id => user_id, :do => 'assign'})
       end
 
+      def delete_application(application_id, options = {})
+        boolean_from_response :delete, "applications/#{application_id}", options
+      end
+
     end
   end
 end
