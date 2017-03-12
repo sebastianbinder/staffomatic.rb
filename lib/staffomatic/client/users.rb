@@ -44,8 +44,8 @@ module Staffomatic
       # @see https://developer.github.com/v3/users/#get-the-authenticated-user
       # @example
       #   Staffomatic.user(493)
-      def user(user=nil, options = {})
-        get User.path(user), options
+      def user(user_id=nil, options = {})
+        get User.path(user_id), options
       end
 
       # Retrieve the access_token.
