@@ -158,7 +158,7 @@ module Staffomatic
       data = request(:get, url, opts)
 
       if @auto_paginate
-        while @last_response.rels[:next] && rate_limit.remaining > 0
+        while has_next_page? && rate_limit.remaining > 0
           @last_response = @last_response.rels[:next].get
           if block_given?
             yield(data, @last_response)
@@ -170,6 +170,14 @@ module Staffomatic
       end
 
       data
+    end
+
+    # We have to check if sawyer found a next page and check the data of the
+    # next response is not an empty array
+    #
+    # @return [Boolean] True on next page and data in next page, false otherwise
+    def has_next_page?
+      @last_response.rels[:next] && @last_response.rels[:next].get.data.any?
     end
 
     # Hypermedia agent for the Staffomatic API
