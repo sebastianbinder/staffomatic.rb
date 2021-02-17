@@ -1,7 +1,6 @@
 # Staffomatic
 
-
-Ruby toolkit for Staffomatic API
+Ruby toolkit for the Staffomatic API
 
 ## Philosophy
 
@@ -30,9 +29,9 @@ configuration) or as client instance methods.
 ```ruby
 # Provide authentication credentials
 Staffomatic.configure do |c|
-  c.email = 'admin@easypep.de'
-  c.password = 'welcome!'
-  c.api_endpoint = 'https://api.staffomaticapp.com/v3/demo'
+  c.email = 'test@example.com'
+  c.password = 'supersafepassword!'
+  c.api_endpoint = 'https://api.staffomaticapp.com/v3/example-account-subdoamin'
 end
 
 # Fetch the current user
@@ -42,7 +41,7 @@ or
 
 ```ruby
 # Provide authentication credentials
-client = Staffomatic::Client.new(:email => 'admin@easypep.de', :password => 'welcome!', :api_endpoint => 'https://api.staffomaticapp.com/v3/demo')
+client = Staffomatic::Client.new(:email => 'test@example.com', :password => 'supersafepassword!', :api_endpoint => 'https://api.staffomaticapp.com/v3/example-account-subdoamin')
 # Fetch the current user
 client.user
 ```
@@ -56,7 +55,7 @@ access for fields returned in the API response.
 # Fetch a user
 user = Staffomatic.user '493'
 puts user.email
-# => "admin@demo.de"
+# => "admin@example.com"
 puts user.fields
 # => <Set: {:created_at, :updated_at, :id, :first_name, :last_name, :account_id, :account_owner, :email, :locale, :full_name, :role, :image, :phone_number_mobile, :phone_number_office, :company, :street, :additional_street, :zip, :city, :country, :invitation_accepted_at, :max_vacation_days, :comments_count, :attachments_count, :commentable, :attachable, :approved_absences_hours, :max_hours_per_month, :department_ids, :invitation_created_at, :invitation_token, :locked_at, :shift_category_ids, :invited_by_id}>
 puts user[:company]
@@ -90,13 +89,13 @@ making authenticated requests:
 
 ```ruby
 client = Staffomatic::Client.new \
-  :email    => 'admin@easypep.de',
-  :password => 'welcome',
-  :account => 'demo'
+  :email    => 'test@example.com',
+  :password => 'supersafepassword',
+  :account => 'example-account-subdoamin'
 
 user = client.user
 user.email
-# => "admin@demo.de"
+# => "admin@example.com"
 ```
 While Basic Authentication allows you to get started quickly, OAuth access
 tokens are the preferred way to authenticate on behalf of users.
@@ -143,14 +142,14 @@ number of client instances based on some shared defaults.
 Every writable attribute in {Staffomatic::Configurable} can be set one at a time:
 
 ```ruby
-Staffomatic.account = 'demo.staffomatic.com/api/v3'
+Staffomatic.account = 'example-account-subdoamin.staffomatic.com/api/v3'
 ```
 
 or in batch:
 
 ```ruby
 Staffomatic.configure do |c|
-  c.account = 'demo.staffomatic.com/api/v3'
+  c.account = 'example-account-subdoamin.staffomatic.com/api/v3'
 end
 ```
 
@@ -161,10 +160,10 @@ attributes will look for a default value from the ENV before returning
 Staffomatic's default.
 
 ```ruby
-# Given $STAFFOMATIC_ACCOUNT is "demo.staffomatic.com"
+# Given $STAFFOMATIC_ACCOUNT is "example-account-subdoamin.staffomatic.com"
 Staffomatic.api_endpoint
 
-# => "http://demo.staffomatic.com/api/v3"
+# => "http://example-account-subdoamin.staffomatic.com/api/v3"
 ```
 
 Deprecation warnings and API endpoints in development preview warnings are
@@ -327,7 +326,7 @@ Constraint][pvc] with two digits of precision. For example:
 
 ## License
 
-Copyright (c) 2013-2014 Kalle Saas
+Copyright (c) 2013-2017 Kalle Saas
 
 Permission is hereby granted, free of charge, to any person obtaining
 a copy of this software and associated documentation files (the

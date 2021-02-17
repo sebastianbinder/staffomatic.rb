@@ -106,11 +106,11 @@ VCR.configure do |c|
 end
 
 def test_staffomatic_email
-  ENV.fetch 'STAFFOMATIC_TEST_EMAIL', 'admin@demo.de'
+  ENV.fetch 'STAFFOMATIC_TEST_EMAIL', 'admin@example.com'
 end
 
 def test_staffomatic_password
-  ENV.fetch 'STAFFOMATIC_TEST_PASSWORD', 'welcome'
+  ENV.fetch 'STAFFOMATIC_TEST_PASSWORD', 'supersafepassword'
 end
 
 # always with version specification
@@ -120,7 +120,7 @@ end
 
 # always with version specification
 def test_staffomatic_account
-  ENV.fetch 'STAFFOMATIC_TEST_ACCOUNT', 'demo'
+  ENV.fetch 'STAFFOMATIC_TEST_ACCOUNT', 'example-account-subdoamin'
 end
 
 def test_staffomatic_token
@@ -140,7 +140,7 @@ def test_staffomatic_location
 end
 
 def test_staffomatic_account
-  ENV.fetch 'STAFFOMATIC_TEST_ACCOUNT', 'demo'
+  ENV.fetch 'STAFFOMATIC_TEST_ACCOUNT', 'example-account-subdoamin'
 end
 
 def test_staffomatic_scheme

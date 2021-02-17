@@ -21,7 +21,7 @@ describe Staffomatic::Client::Users do
   describe ".user", :vcr do
     it "returns a user" do
       user = @client.user(493)
-      expect(user.email).to eq('admin@demo.de')
+      expect(user.email).to eq('admin@example.com')
     end
     it "returns the authenticated user" do
       user = @client.user

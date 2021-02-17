@@ -39,9 +39,9 @@ describe Staffomatic::Client do
         @opts = {
           :connection_options => {:ssl => {:verify => false}},
           :per_page     => 40,
-          :email        => "admin@easypep.de",
-          :password     => "welcome",
-          :account      => "demo",
+          :email        => "test@example.com",
+          :password     => "supersafepassword",
+          :account      => "example-account-subdoamin",
           :scheme       => 'https'
         }
       end
@@ -51,11 +51,11 @@ describe Staffomatic::Client do
 
         expect(client.per_page).to eq(40)
 
-        expect(client.email).to eq("admin@easypep.de")
-        expect(client.instance_variable_get(:"@password")).to eq("welcome")
+        expect(client.email).to eq("test@example.com")
+        expect(client.instance_variable_get(:"@password")).to eq("supersafepassword")
         expect(client.scheme).to eq('https')
-        expect(client.account).to eq('demo')
-        expect(client.api_endpoint).to eq('https://api.staffomaticapp.com/v3/demo/')
+        expect(client.account).to eq('example-account-subdoamin')
+        expect(client.api_endpoint).to eq('https://api.staffomaticapp.com/v3/example-account-subdoamin/')
 
         expect(client.auto_paginate).to eq(Staffomatic.auto_paginate)
         expect(client.client_id).to eq(Staffomatic.client_id)
@@ -69,8 +69,8 @@ describe Staffomatic::Client do
           end
         end
         expect(client.per_page).to eq(40)
-        expect(client.email).to eq("admin@demo.de")
-        expect(client.instance_variable_get(:"@password")).to eq("welcome")
+        expect(client.email).to eq("admin@example.com")
+        expect(client.instance_variable_get(:"@password")).to eq("supersafepassword")
         expect(client.auto_paginate).to eq(Staffomatic.auto_paginate)
         expect(client.client_id).to eq(Staffomatic.client_id)
       end
@@ -80,19 +80,19 @@ describe Staffomatic::Client do
         client = Staffomatic::Client.new(
           scheme: 'http',
           access_token: 'sometoken',
-          account: 'demo',
-          api_endpoint: 'http://staffomatic-api.dev/v3/demo'
+          account: 'example-account-subdoamin',
+          api_endpoint: 'http://staffomatic-api.dev/v3/example-account-subdoamin'
         )
         expect(client.scheme).to eq('http')
         expect(client.access_token).to eq('sometoken')
-        expect(client.instance_variable_get(:"@account")).to eq('demo')
-        expect(client.api_endpoint).to eq('http://staffomatic-api.dev/v3/demo')
+        expect(client.instance_variable_get(:"@account")).to eq('example-account-subdoamin')
+        expect(client.api_endpoint).to eq('http://staffomatic-api.dev/v3/example-account-subdoamin')
       end
 
       it "masks passwords on inspect" do
         client = Staffomatic::Client.new(@opts)
         inspected = client.inspect
-        expect(inspected).not_to include("welcome")
+        expect(inspected).not_to include("supersafepassword")
       end
 
       it "masks tokens on inspect" do
@@ -122,15 +122,15 @@ describe Staffomatic::Client do
       end
       it "sets basic auth creds with .configure" do
         Staffomatic.configure do |config|
-          config.email = 'admin@demo.de'
-          config.password = 'welcome'
-          config.account = 'demo'
+          config.email = 'admin@example.com'
+          config.password = 'supersafepassword'
+          config.account = 'example-account-subdoamin'
         end
         expect(Staffomatic.client).to be_basic_authenticated
       end
       it "sets basic auth creds with module methods" do
-        Staffomatic.email = 'admin@demo.de'
-        Staffomatic.password = 'welcome'
+        Staffomatic.email = 'admin@example.com'
+        Staffomatic.password = 'supersafepassword'
         expect(Staffomatic.client).to be_basic_authenticated
       end
       it "sets oauth token with .configure" do
@@ -166,14 +166,14 @@ describe Staffomatic::Client do
     describe "with class level config" do
       it "sets basic auth creds with .configure" do
         @client.configure do |config|
-          config.email = 'admin@demo.de'
-          config.password = 'welcome'
+          config.email = 'admin@example.com'
+          config.password = 'supersafepassword'
         end
         expect(@client).to be_basic_authenticated
       end
       it "sets basic auth creds with instance methods" do
-        @client.email = 'admin@demo.de'
-        @client.password = 'welcome'
+        @client.email = 'admin@example.com'
+        @client.password = 'supersafepassword'
         expect(@client).to be_basic_authenticated
       end
       it "sets oauth token with .configure" do
@@ -207,11 +207,11 @@ describe Staffomatic::Client do
     describe "when basic authenticated"  do
       it "makes authenticated calls" do
         Staffomatic.configure do |config|
-          config.email = 'admin@demo.de'
-          config.password = 'welcome'
-          config.account = 'demo'
+          config.email = 'admin@example.com'
+          config.password = 'supersafepassword'
+          config.account = 'example-account-subdoamin'
         end
-        root_request = stub_get("https://admin%40demo.de:welcome@api.staffomatic-api.dev/v3/demo")
+        root_request = stub_get("https://admin%40example-account-subdoamin.de:supersafepassword@api.staffomatic-api.dev/v3/example-account-subdoamin")
         Staffomatic.client.get("/api")
         assert_requested root_request
       end
@@ -221,7 +221,7 @@ describe Staffomatic::Client do
       it "makes authenticated calls" do
         client = oauth_client
 
-        root_request = stub_get("https://api.staffomaticapp.com/demo/api").
+        root_request = stub_get("https://api.staffomaticapp.com/example-account-subdoamin/api").
           with(:headers => {:authorization => "Bearer #{test_staffomatic_token}"})
         client.get("/api")
         assert_requested root_request
@@ -274,7 +274,7 @@ describe Staffomatic::Client do
     end
     it "handles query params" do
       Staffomatic.get "/api", :foo => "bar"
-      assert_requested :get, "https://api.staffomaticapp.com/v3/demo/api?foo=bar"
+      assert_requested :get, "https://api.staffomaticapp.com/v3/example-account-subdoamin/api?foo=bar"
     end
     it "handles headers" do
       request = stub_get("/zen").
@@ -288,7 +288,7 @@ describe Staffomatic::Client do
     it "handles query params" do
       Staffomatic.reset!
       Staffomatic.head "/api", :foo => "bar"
-      assert_requested :head, "https://api.staffomaticapp.com/v3/demo/api?foo=bar"
+      assert_requested :head, "https://api.staffomaticapp.com/v3/example-account-subdoamin/api?foo=bar"
     end
     it "handles headers" do
       Staffomatic.reset!
@@ -306,7 +306,7 @@ describe Staffomatic::Client do
     end
     it "Accepts application/vnd.staffomatic.v3+json by default" do
       VCR.use_cassette 'root' do
-        root_request = stub_get("https://api.staffomaticapp.com/v3/demo/api").
+        root_request = stub_get("https://api.staffomaticapp.com/v3/example-account-subdoamin/api").
           with(:headers => {:accept => "application/vnd.staffomatic.v3+json"})
         @client.get "/api"
         assert_requested root_request
@@ -314,14 +314,14 @@ describe Staffomatic::Client do
       end
     end
     it "allows Accept'ing another media type" do
-      root_request = stub_get("https://api.staffomaticapp.com/v3/demo/api").
+      root_request = stub_get("https://api.staffomaticapp.com/v3/example-account-subdoamin/api").
         with(:headers => {:accept => "application/vnd.staffomatic.beta.diff+json"})
       @client.get "/api", :accept => "application/vnd.staffomatic.beta.diff+json"
       assert_requested root_request
       expect(@client.last_response.status).to eq(200)
     end
     it "sets a default user agent" do
-      root_request = stub_get("https://api.staffomaticapp.com/v3/demo/api").
+      root_request = stub_get("https://api.staffomaticapp.com/v3/example-account-subdoamin/api").
         with(:headers => {:user_agent => Staffomatic::Default.user_agent})
       @client.get "/api"
       assert_requested root_request
@@ -329,7 +329,7 @@ describe Staffomatic::Client do
     end
     it "sets a custom user agent" do
       user_agent = "Mozilla/5.0 I am Spartacus!"
-      root_request = stub_get("https://api.staffomaticapp.com/v3/demo/api").
+      root_request = stub_get("https://api.staffomaticapp.com/v3/example-account-subdoamin/api").
         with(:headers => {:user_agent => user_agent})
       client = Staffomatic::Client.new(:user_agent => user_agent)
       client.get "/api"
@@ -345,7 +345,7 @@ describe Staffomatic::Client do
     end
     it "passes along request headers for POST" do
       headers = {"X-Staffomatic-Foo" => "bar"}
-      root_request = stub_post("https://api.staffomaticapp.com/v3/demo/api").
+      root_request = stub_post("https://api.staffomaticapp.com/v3/example-account-subdoamin/api").
         with(:headers => headers).
         to_return(:status => 201)
       client = Staffomatic::Client.new
@@ -357,13 +357,13 @@ describe Staffomatic::Client do
       client = Staffomatic::Client.new
       client.client_id     = key = '97b4937b385eb63d1f46'
       client.client_secret = secret = 'd255197b4937b385eb63d1f4677e3ffee61fbaea'
-      root_request = stub_get "https://api.staffomaticapp.com/v3/demo/api?client_id=#{key}&client_secret=#{secret}"
+      root_request = stub_get "https://api.staffomaticapp.com/v3/example-account-subdoamin/api?client_id=#{key}&client_secret=#{secret}"
 
       client.get("/api")
       assert_requested root_request
     end
     it "omits app creds in query params for basic requests" do
-      client = Staffomatic::Client.new :email => "admin@demo.de", :password => "passw0rd"
+      client = Staffomatic::Client.new :email => "admin@example.com", :password => "passw0rd"
       client.client_id     = key = '97b4937b385eb63d1f46'
       client.client_secret = secret = 'd255197b4937b385eb63d1f4677e3ffee61fbaea'
       root_request = stub_get basic_staffomatic_url("/zen?foo=bar", :login => "login", :password => "passw0rd")
@@ -375,7 +375,7 @@ describe Staffomatic::Client do
       client = Staffomatic::Client.new(:access_token => '87614b09dd141c22800f96f11737ade5226d7ba8')
       client.client_id     = key = '97b4937b385eb63d1f46'
       client.client_secret = secret = 'd255197b4937b385eb63d1f4677e3ffee61fbaea'
-      root_request = stub_get(staffomatic_url("https://api.staffomaticapp.com/v3/demo/api?foo=bar")).with \
+      root_request = stub_get(staffomatic_url("https://api.staffomaticapp.com/v3/example-account-subdoamin/api?foo=bar")).with \
         :headers => {"Authorization" => "Bearer 87614b09dd141c22800f96f11737ade5226d7ba8"}
 
       client.get("/api", :foo => "bar")
