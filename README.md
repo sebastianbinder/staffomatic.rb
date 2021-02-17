@@ -1,7 +1,7 @@
 # Staffomatic
 
 
-Ruby toolkit for the upcoming Staffomatic API. Not Production ready!
+Ruby toolkit for Staffomatic API
 
 ## Philosophy
 
@@ -100,28 +100,6 @@ user.email
 ```
 While Basic Authentication allows you to get started quickly, OAuth access
 tokens are the preferred way to authenticate on behalf of users.
-
-### OAuth access tokens
-
-[OAuth access tokens][oauth] provide two main benefits over using your username
-and password:
-
-* **Revokable access**. Access tokens can be revoked, removing access for only
-  that token without having to change your password everywhere.
-* **Limited access**. Access tokens have [access scopes][] which allow for more
-  granular access to API resources. For instance, you can grant a third party
-  access to your gists but not your private repositories.
-
-To use an access token with the Staffomatic client, pass your token in the
-`:access_token` options parameter in lieu of your username and password:
-
-```ruby
-client = Staffomatic::Client.new(:access_token => "<your 40 char token>", :account => 'demo.staffomatic.com')
-
-user = client.user
-user.email
-# => "admin@demo.de"
-```
 
 ## Pagination
 
