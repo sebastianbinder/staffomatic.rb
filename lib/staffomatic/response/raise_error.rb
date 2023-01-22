@@ -7,7 +7,7 @@ module Staffomatic
 
     # This class raises an Staffomatic-flavored exception based
     # HTTP status codes returned by the API
-    class RaiseError < Faraday::Response::Middleware
+    class RaiseError < Faraday::Middleware
 
       private
 
