@@ -19,6 +19,7 @@ module Staffomatic
       def all_locations(options = {})
         paginate "locations", options
       end
+      alias locations all_locations
 
       # Get a single location
       #

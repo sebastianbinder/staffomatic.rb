@@ -19,6 +19,7 @@ module Staffomatic
       def all_absence_types(options = {})
         paginate "absence_types", options
       end
+      alias absence_types all_absence_types
 
       # List all Staffomatic location absence_types
       #

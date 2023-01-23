@@ -19,6 +19,7 @@ module Staffomatic
       def all_shifts(options = {})
         paginate "shifts", options
       end
+      alias shifts all_shifts
 
       # List all location shifts
       #
